@@ -1,0 +1,35 @@
+name: Workflow
+
+on:
+  push:
+    tags: ["*"]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  assert-version-matches-tag:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4.6.1
+        with:
+          python-version: "3.11"
+
+      - name: Install self
+        run: pip install ./
+
+      - name: Assert version matches tag
+        run: test $(pip show explore-frames | grep Version | cut -d ' ' -f 2) == ${{ github.ref_name }}
+
+      - name: Delete tag and release
+        if: ${{ failure() }}
+        uses: dev-drprasad/delete-tag-and-release@v1.0.1
+        with:
+          tag_name: ${{ github.ref_name }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          delete_release: true
