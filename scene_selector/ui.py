@@ -55,6 +55,9 @@ def flet_target(video_path: Path):
         # controls
         img_start = ft.Image(fit=ft.ImageFit.CONTAIN)
         text_start = ft.Text()
+        button_sub_100_start = ft.ElevatedButton(
+            "-100", on_click=lambda _: set_start(start[0] - 100)
+        )
         button_sub_10_start = ft.ElevatedButton(
             "-10", on_click=lambda _: set_start(start[0] - 10)
         )
@@ -67,6 +70,9 @@ def flet_target(video_path: Path):
         button_add_10_start = ft.ElevatedButton(
             "+10", on_click=lambda _: set_start(start[0] + 10)
         )
+        button_add_100_start = ft.ElevatedButton(
+            "+100", on_click=lambda _: set_start(start[0] + 100)
+        )
         slider_start = ft.Slider(
             min=frame_min,
             max=frame_max,
@@ -77,6 +83,9 @@ def flet_target(video_path: Path):
 
         img_end = ft.Image(fit=ft.ImageFit.CONTAIN)
         text_end = ft.Text()
+        button_sub_100_end = ft.ElevatedButton(
+            "-100", on_click=lambda _: set_end(end[0] - 100)
+        )
         button_sub_10_end = ft.ElevatedButton(
             "-10", on_click=lambda _: set_end(end[0] - 10)
         )
@@ -88,6 +97,9 @@ def flet_target(video_path: Path):
         )
         button_add_10_end = ft.ElevatedButton(
             "+10", on_click=lambda _: set_end(end[0] + 10)
+        )
+        button_add_100_end = ft.ElevatedButton(
+            "+100", on_click=lambda _: set_end(end[0] + 100)
         )
         slider_end = ft.Slider(
             min=frame_min,
@@ -110,11 +122,13 @@ def flet_target(video_path: Path):
                 img_start,
                 ft.Row(
                     [
+                        button_sub_100_start,
                         button_sub_10_start,
                         button_sub_1_start,
                         text_start,
                         button_add_1_start,
                         button_add_10_start,
+                        button_add_100_start,
                     ],
                     alignment=ft.MainAxisAlignment.CENTER,
                 ),
@@ -125,11 +139,13 @@ def flet_target(video_path: Path):
                 img_end,
                 ft.Row(
                     [
+                        button_sub_100_end,
                         button_sub_10_end,
                         button_sub_1_end,
                         text_end,
                         button_add_1_end,
                         button_add_10_end,
+                        button_add_100_end,
                     ],
                     alignment=ft.MainAxisAlignment.CENTER,
                 ),
