@@ -7,6 +7,8 @@ from scene_selector.video import Video
 
 def flet_target(video_path: Path):
     def flet_target(page: ft.Page):
+        page.title = "scene-selector"
+
         video = Video(path=video_path)
 
         frame_min = 0
