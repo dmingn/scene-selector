@@ -3,7 +3,7 @@ profile = "black"
 
 [tool.poetry]
 name = "scene-selector"
-version = "0.1.0"
+version = "2023.7.4.1"
 description = ""
 authors = ["dmingn <dmingn@users.noreply.github.com>"]
 license = "MIT License"
