@@ -133,6 +133,7 @@ def flet_target(video_path: Path):
                     alignment=ft.MainAxisAlignment.CENTER,
                 ),
             ],
+            expand=True,
         )
         container_end = ft.Column(
             [
@@ -150,38 +151,37 @@ def flet_target(video_path: Path):
                     alignment=ft.MainAxisAlignment.CENTER,
                 ),
             ],
+            expand=True,
         )
-        container_sliders = ft.Column([slider_start, slider_end])
+        container_sliders = ft.Column([slider_start, slider_end], spacing=0)
+        text_command.expand = True
 
         page.add(
-            ft.Column(
-                [
-                    ft.Row(
-                        [container_start, container_end],
-                        alignment=ft.MainAxisAlignment.CENTER,
-                    ),
-                    container_sliders,
-                    ft.Row(
-                        [text_command, button_copy_command],
-                        alignment=ft.MainAxisAlignment.CENTER,
-                    ),
-                ],
-                horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+            ft.Container(
+                ft.Column(
+                    [
+                        ft.Row(
+                            [container_start, container_end],
+                            alignment=ft.MainAxisAlignment.CENTER,
+                        ),
+                        container_sliders,
+                        ft.Container(
+                            ft.Row(
+                                [text_command, button_copy_command],
+                                alignment=ft.MainAxisAlignment.CENTER,
+                            ),
+                            margin=ft.margin.symmetric(vertical=20, horizontal=50),
+                        ),
+                    ],
+                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                ),
+                margin=ft.margin.symmetric(vertical=30, horizontal=20),
             )
         )
-
-        def on_page_resize(_):
-            container_start.width = page.width * 0.45
-            container_end.width = page.width * 0.45
-            container_sliders.width = page.width * 0.9
-            page.update()
-
-        page.on_resize = on_page_resize
 
         # init
         set_start(frame_min)
         set_end(frame_max)
-        on_page_resize(None)
         page.update()
 
     return flet_target
