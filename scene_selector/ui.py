@@ -2,7 +2,7 @@ from pathlib import Path
 
 import flet as ft
 
-from explore_frames.video import Video
+from scene_selector.video import Video
 
 
 def flet_target(video_path: Path):

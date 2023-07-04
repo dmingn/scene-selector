@@ -3,7 +3,7 @@ from pathlib import Path
 import click
 import flet as ft
 
-from explore_frames.ui import flet_target
+from scene_selector.ui import flet_target
 
 
 @click.command()

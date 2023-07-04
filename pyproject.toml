@@ -2,13 +2,13 @@
 profile = "black"
 
 [tool.poetry]
-name = "explore-frames"
+name = "scene-selector"
 version = "0.1.0"
 description = ""
 authors = ["dmingn <dmingn@users.noreply.github.com>"]
 license = "MIT License"
 readme = "README.md"
-packages = [{include = "explore_frames"}]
+packages = [{include = "scene_selector"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -23,7 +23,7 @@ isort = {extras = ["pyproject"], version = "^5.12.0"}
 mypy = "^1.4.1"
 
 [tool.poetry.scripts]
-explore-frames = "explore_frames.__main__:cli"
+scene-selector = "scene_selector.__main__:cli"
 
 [build-system]
 requires = ["poetry-core"]
