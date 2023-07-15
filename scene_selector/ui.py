@@ -5,6 +5,10 @@ import flet as ft
 from scene_selector.video import Video
 
 
+def frames_to_seconds(frames: int, fps: float) -> float:
+    return frames / fps
+
+
 def flet_target(video_path: Path):
     def flet_target(page: ft.Page):
         page.title = "scene-selector"
@@ -24,11 +28,11 @@ def flet_target(video_path: Path):
                 [
                     "ffmpeg",
                     "-ss",
-                    str(start[0] * video.fps),
+                    str(frames_to_seconds(start[0], video.fps)),
                     "-i",
                     str(video_path),
                     "-to",
-                    str((end[0] - start[0]) * video.fps),
+                    str(frames_to_seconds(end[0] - start[0], video.fps)),
                     "-c",
                     "copy",
                     str(video_path.with_stem("out")),
