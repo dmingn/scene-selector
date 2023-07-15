@@ -77,22 +77,34 @@ def flet_target(video_path: Path):
         timecode_start = ft.Text()
         frames_start = ft.Text()
         button_sub_100_start = ft.ElevatedButton(
-            "-100", on_click=lambda _: set_start(start[0] - 100)
+            "-100",
+            on_click=lambda _: set_start(start[0] - 100),
+            style=ft.ButtonStyle(padding=8),
         )
         button_sub_10_start = ft.ElevatedButton(
-            "-10", on_click=lambda _: set_start(start[0] - 10)
+            "-10",
+            on_click=lambda _: set_start(start[0] - 10),
+            style=ft.ButtonStyle(padding=8),
         )
         button_sub_1_start = ft.ElevatedButton(
-            "-1", on_click=lambda _: set_start(start[0] - 1)
+            "-1",
+            on_click=lambda _: set_start(start[0] - 1),
+            style=ft.ButtonStyle(padding=8),
         )
         button_add_1_start = ft.ElevatedButton(
-            "+1", on_click=lambda _: set_start(start[0] + 1)
+            "+1",
+            on_click=lambda _: set_start(start[0] + 1),
+            style=ft.ButtonStyle(padding=8),
         )
         button_add_10_start = ft.ElevatedButton(
-            "+10", on_click=lambda _: set_start(start[0] + 10)
+            "+10",
+            on_click=lambda _: set_start(start[0] + 10),
+            style=ft.ButtonStyle(padding=8),
         )
         button_add_100_start = ft.ElevatedButton(
-            "+100", on_click=lambda _: set_start(start[0] + 100)
+            "+100",
+            on_click=lambda _: set_start(start[0] + 100),
+            style=ft.ButtonStyle(padding=8),
         )
         slider_start = ft.Slider(
             min=frame_min,
@@ -106,22 +118,34 @@ def flet_target(video_path: Path):
         timecode_end = ft.Text()
         frames_end = ft.Text()
         button_sub_100_end = ft.ElevatedButton(
-            "-100", on_click=lambda _: set_end(end[0] - 100)
+            "-100",
+            on_click=lambda _: set_end(end[0] - 100),
+            style=ft.ButtonStyle(padding=8),
         )
         button_sub_10_end = ft.ElevatedButton(
-            "-10", on_click=lambda _: set_end(end[0] - 10)
+            "-10",
+            on_click=lambda _: set_end(end[0] - 10),
+            style=ft.ButtonStyle(padding=8),
         )
         button_sub_1_end = ft.ElevatedButton(
-            "-1", on_click=lambda _: set_end(end[0] - 1)
+            "-1",
+            on_click=lambda _: set_end(end[0] - 1),
+            style=ft.ButtonStyle(padding=8),
         )
         button_add_1_end = ft.ElevatedButton(
-            "+1", on_click=lambda _: set_end(end[0] + 1)
+            "+1",
+            on_click=lambda _: set_end(end[0] + 1),
+            style=ft.ButtonStyle(padding=8),
         )
         button_add_10_end = ft.ElevatedButton(
-            "+10", on_click=lambda _: set_end(end[0] + 10)
+            "+10",
+            on_click=lambda _: set_end(end[0] + 10),
+            style=ft.ButtonStyle(padding=8),
         )
         button_add_100_end = ft.ElevatedButton(
-            "+100", on_click=lambda _: set_end(end[0] + 100)
+            "+100",
+            on_click=lambda _: set_end(end[0] + 100),
+            style=ft.ButtonStyle(padding=8),
         )
         slider_end = ft.Slider(
             min=frame_min,
