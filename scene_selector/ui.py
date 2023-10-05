@@ -38,7 +38,7 @@ def flet_target(video_path: Path):
                     "-ss",
                     seconds_to_timecode(frames_to_seconds(start[0], video.fps)),
                     "-i",
-                    str(video_path),
+                    str(video_path).replace(" ", r"\ "),
                     "-to",
                     seconds_to_timecode(
                         frames_to_seconds(end[0] - start[0], video.fps)
