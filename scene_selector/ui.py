@@ -45,7 +45,7 @@ def flet_target(video_path: Path):
                     ),
                     "-c",
                     "copy",
-                    str(video_path.with_stem("out")),
+                    str(video_path.with_stem(f"{video_path.stem}-{start[0]}-{end[0]}")).replace(" ", r"\ "),
                 ]
             )
             text_command.value = f"```{command[0]}```"
