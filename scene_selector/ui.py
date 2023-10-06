@@ -38,14 +38,14 @@ def flet_target(video_path: Path):
                     "-ss",
                     seconds_to_timecode(frames_to_seconds(start[0], video.fps)),
                     "-i",
-                    str(video_path).replace(" ", r"\ "),
+                    str(video_path.resolve()).replace(" ", r"\ "),
                     "-to",
                     seconds_to_timecode(
                         frames_to_seconds(end[0] - start[0], video.fps)
                     ),
                     "-c",
                     "copy",
-                    str(video_path.with_stem("out")),
+                    str(video_path.resolve().with_stem(f"{video_path.stem}-{start[0]}-{end[0]}")).replace(" ", r"\ "),
                 ]
             )
             text_command.value = f"```{command[0]}```"
