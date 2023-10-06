@@ -76,6 +76,36 @@ def flet_target(video_path: Path):
         img_start = ft.Image(fit=ft.ImageFit.CONTAIN)
         timecode_start = ft.Text()
         frames_start = ft.Text()
+        button_sub_100s_start = ft.ElevatedButton(
+            "-100s",
+            on_click=lambda _: set_start(start[0] - int(100 * video.fps)),
+            style=ft.ButtonStyle(padding=8),
+        )
+        button_sub_10s_start = ft.ElevatedButton(
+            "-10s",
+            on_click=lambda _: set_start(start[0] - int(10 * video.fps)),
+            style=ft.ButtonStyle(padding=8),
+        )
+        button_sub_1s_start = ft.ElevatedButton(
+            "-1s",
+            on_click=lambda _: set_start(start[0] - int(1 * video.fps)),
+            style=ft.ButtonStyle(padding=8),
+        )
+        button_add_1s_start = ft.ElevatedButton(
+            "+1s",
+            on_click=lambda _: set_start(start[0] + int(1 * video.fps)),
+            style=ft.ButtonStyle(padding=8),
+        )
+        button_add_10s_start = ft.ElevatedButton(
+            "+10s",
+            on_click=lambda _: set_start(start[0] + int(10 * video.fps)),
+            style=ft.ButtonStyle(padding=8),
+        )
+        button_add_100s_start = ft.ElevatedButton(
+            "+100s",
+            on_click=lambda _: set_start(start[0] + int(100 * video.fps)),
+            style=ft.ButtonStyle(padding=8),
+        )
         button_sub_100_start = ft.ElevatedButton(
             "-100",
             on_click=lambda _: set_start(start[0] - 100),
@@ -117,6 +147,36 @@ def flet_target(video_path: Path):
         img_end = ft.Image(fit=ft.ImageFit.CONTAIN)
         timecode_end = ft.Text()
         frames_end = ft.Text()
+        button_sub_100s_end = ft.ElevatedButton(
+            "-100s",
+            on_click=lambda _: set_end(end[0] - int(100 * video.fps)),
+            style=ft.ButtonStyle(padding=8),
+        )
+        button_sub_10s_end = ft.ElevatedButton(
+            "-10s",
+            on_click=lambda _: set_end(end[0] - int(10 * video.fps)),
+            style=ft.ButtonStyle(padding=8),
+        )
+        button_sub_1s_end = ft.ElevatedButton(
+            "-1s",
+            on_click=lambda _: set_end(end[0] - int(1 * video.fps)),
+            style=ft.ButtonStyle(padding=8),
+        )
+        button_add_1s_end = ft.ElevatedButton(
+            "+1s",
+            on_click=lambda _: set_end(end[0] + int(1 * video.fps)),
+            style=ft.ButtonStyle(padding=8),
+        )
+        button_add_10s_end = ft.ElevatedButton(
+            "+10s",
+            on_click=lambda _: set_end(end[0] + int(10 * video.fps)),
+            style=ft.ButtonStyle(padding=8),
+        )
+        button_add_100s_end = ft.ElevatedButton(
+            "+100s",
+            on_click=lambda _: set_end(end[0] + int(100 * video.fps)),
+            style=ft.ButtonStyle(padding=8),
+        )
         button_sub_100_end = ft.ElevatedButton(
             "-100",
             on_click=lambda _: set_end(end[0] - 100),
@@ -166,20 +226,34 @@ def flet_target(video_path: Path):
         container_start = ft.Column(
             [
                 img_start,
-                ft.Row(
+                ft.Column(
                     [
-                        button_sub_100_start,
-                        button_sub_10_start,
-                        button_sub_1_start,
-                        ft.Column(
-                            [timecode_start, frames_start],
-                            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                        ft.Row(
+                            [
+                                button_sub_100s_start,
+                                button_sub_10s_start,
+                                button_sub_1s_start,
+                                timecode_start,
+                                button_add_1s_start,
+                                button_add_10s_start,
+                                button_add_100s_start,
+                            ],
+                            alignment=ft.MainAxisAlignment.CENTER,
                         ),
-                        button_add_1_start,
-                        button_add_10_start,
-                        button_add_100_start,
+                        ft.Row(
+                            [
+                                button_sub_100_start,
+                                button_sub_10_start,
+                                button_sub_1_start,
+                                frames_start,
+                                button_add_1_start,
+                                button_add_10_start,
+                                button_add_100_start,
+                            ],
+                            alignment=ft.MainAxisAlignment.CENTER,
+                        ),
                     ],
-                    alignment=ft.MainAxisAlignment.CENTER,
+                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 ),
             ],
             expand=True,
@@ -187,20 +261,34 @@ def flet_target(video_path: Path):
         container_end = ft.Column(
             [
                 img_end,
-                ft.Row(
+                ft.Column(
                     [
-                        button_sub_100_end,
-                        button_sub_10_end,
-                        button_sub_1_end,
-                        ft.Column(
-                            [timecode_end, frames_end],
-                            horizontal_alignment=ft.CrossAxisAlignment.CENTER,
+                        ft.Row(
+                            [
+                                button_sub_100s_end,
+                                button_sub_10s_end,
+                                button_sub_1s_end,
+                                timecode_end,
+                                button_add_1s_end,
+                                button_add_10s_end,
+                                button_add_100s_end,
+                            ],
+                            alignment=ft.MainAxisAlignment.CENTER,
                         ),
-                        button_add_1_end,
-                        button_add_10_end,
-                        button_add_100_end,
+                        ft.Row(
+                            [
+                                button_sub_100_end,
+                                button_sub_10_end,
+                                button_sub_1_end,
+                                frames_end,
+                                button_add_1_end,
+                                button_add_10_end,
+                                button_add_100_end,
+                            ],
+                            alignment=ft.MainAxisAlignment.CENTER,
+                        ),
                     ],
-                    alignment=ft.MainAxisAlignment.CENTER,
+                    horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 ),
             ],
             expand=True,
