@@ -29,6 +29,8 @@ def flet_target(video_path: Path):
         start = [frame_min]
         end = [frame_max]
         command = [""]
+        bisection_range_start = [frame_min, frame_max]
+        bisection_range_end = [frame_min, frame_max]
 
         # callbacks
         def update_command():
@@ -75,6 +77,64 @@ def flet_target(video_path: Path):
             frames_end.value = str(end[0])
             update_command()
             page.update()
+
+        def init_bisection_range_start():
+            bisection_range_start[0] = frame_min
+            bisection_range_start[1] = end[0]
+            bisection_range_text_start.value = (
+                f"[{bisection_range_start[0]}, {bisection_range_start[1]}]"
+            )
+            set_start(
+                value=int((bisection_range_start[0] + bisection_range_start[1]) / 2)
+            )
+
+        def bisect_left_start():
+            bisection_range_start[1] = int(
+                (bisection_range_start[0] + bisection_range_start[1]) / 2
+            )
+            bisection_range_text_start.value = (
+                f"[{bisection_range_start[0]}, {bisection_range_start[1]}]"
+            )
+            set_start(
+                value=int((bisection_range_start[0] + bisection_range_start[1]) / 2)
+            )
+
+        def bisect_right_start():
+            bisection_range_start[0] = int(
+                (bisection_range_start[0] + bisection_range_start[1]) / 2
+            )
+            bisection_range_text_start.value = (
+                f"[{bisection_range_start[0]}, {bisection_range_start[1]}]"
+            )
+            set_start(
+                value=int((bisection_range_start[0] + bisection_range_start[1]) / 2)
+            )
+
+        def init_bisection_range_end():
+            bisection_range_end[0] = start[0]
+            bisection_range_end[1] = frame_max
+            bisection_range_text_end.value = (
+                f"[{bisection_range_end[0]}, {bisection_range_end[1]}]"
+            )
+            set_end(value=int((bisection_range_end[0] + bisection_range_end[1]) / 2))
+
+        def bisect_left_end():
+            bisection_range_end[1] = int(
+                (bisection_range_end[0] + bisection_range_end[1]) / 2
+            )
+            bisection_range_text_end.value = (
+                f"[{bisection_range_end[0]}, {bisection_range_end[1]}]"
+            )
+            set_end(value=int((bisection_range_end[0] + bisection_range_end[1]) / 2))
+
+        def bisect_right_end():
+            bisection_range_end[0] = int(
+                (bisection_range_end[0] + bisection_range_end[1]) / 2
+            )
+            bisection_range_text_end.value = (
+                f"[{bisection_range_end[0]}, {bisection_range_end[1]}]"
+            )
+            set_end(value=int((bisection_range_end[0] + bisection_range_end[1]) / 2))
 
         # controls
         img_start = ft.Image(fit=ft.ImageFit.CONTAIN)
@@ -147,6 +207,22 @@ def flet_target(video_path: Path):
             label="{value}",
             on_change=lambda e: set_start(e.control.value),
         )
+        bisection_range_text_start = ft.Text()
+        button_init_bisection_start = ft.ElevatedButton(
+            "init bisection",
+            on_click=lambda _: init_bisection_range_start(),
+            style=ft.ButtonStyle(padding=8),
+        )
+        button_bisect_left_start = ft.ElevatedButton(
+            "left",
+            on_click=lambda _: bisect_left_start(),
+            style=ft.ButtonStyle(padding=8),
+        )
+        button_bisect_right_start = ft.ElevatedButton(
+            "right",
+            on_click=lambda _: bisect_right_start(),
+            style=ft.ButtonStyle(padding=8),
+        )
 
         img_end = ft.Image(fit=ft.ImageFit.CONTAIN)
         timecode_end = ft.Text()
@@ -218,6 +294,22 @@ def flet_target(video_path: Path):
             label="{value}",
             on_change=lambda e: set_end(e.control.value),
         )
+        bisection_range_text_end = ft.Text()
+        button_init_bisection_end = ft.ElevatedButton(
+            "init bisection",
+            on_click=lambda _: init_bisection_range_end(),
+            style=ft.ButtonStyle(padding=8),
+        )
+        button_bisect_left_end = ft.ElevatedButton(
+            "left",
+            on_click=lambda _: bisect_left_end(),
+            style=ft.ButtonStyle(padding=8),
+        )
+        button_bisect_right_end = ft.ElevatedButton(
+            "right",
+            on_click=lambda _: bisect_right_end(),
+            style=ft.ButtonStyle(padding=8),
+        )
 
         text_command = ft.Markdown(selectable=True)
         button_copy_command = ft.IconButton(
@@ -256,6 +348,15 @@ def flet_target(video_path: Path):
                             ],
                             alignment=ft.MainAxisAlignment.CENTER,
                         ),
+                        ft.Row(
+                            [
+                                button_bisect_left_start,
+                                button_init_bisection_start,
+                                button_bisect_right_start,
+                            ],
+                            alignment=ft.MainAxisAlignment.CENTER,
+                        ),
+                        bisection_range_text_start,
                     ],
                     horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 ),
@@ -291,6 +392,15 @@ def flet_target(video_path: Path):
                             ],
                             alignment=ft.MainAxisAlignment.CENTER,
                         ),
+                        ft.Row(
+                            [
+                                button_bisect_left_end,
+                                button_init_bisection_end,
+                                button_bisect_right_end,
+                            ],
+                            alignment=ft.MainAxisAlignment.CENTER,
+                        ),
+                        bisection_range_text_end,
                     ],
                     horizontal_alignment=ft.CrossAxisAlignment.CENTER,
                 ),
