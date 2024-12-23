@@ -3,7 +3,6 @@ avsynctest.mp4: Makefile
 
 .PHONY: bump-version
 bump-version:
-	bash update-calvar.bash package.json && \
 	npm install && \
-	git add package.json package-lock.json && \
+	git add -p package.json package-lock.json && \
 	git commit -m "Bump version"
