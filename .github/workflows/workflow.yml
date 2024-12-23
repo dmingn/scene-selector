@@ -2,36 +2,33 @@ name: Workflow
 
 on:
   push:
-    tags: ["*"]
+    tags: ['*']
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  assert-version-matches-tag:
-    runs-on: ubuntu-latest
+  electron-forge-publish:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
     permissions:
       contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Python
-        uses: actions/setup-python@v5.1.0
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
         with:
-          python-version: "3.11"
+          node-version: '22'
 
-      - name: Install self
-        run: pip install ./
+      - name: Install dependencies
+        run: npm install
 
-      - name: Assert version matches tag
-        run: test $(pip show scene-selector | grep Version | cut -d ' ' -f 2) == ${{ github.ref_name }}
-
-      - name: Delete tag and release
-        if: ${{ failure() }}
-        uses: dev-drprasad/delete-tag-and-release@v1.1
-        with:
-          tag_name: ${{ github.ref_name }}
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          delete_release: true
+      - name: Publish
+        run: npm run publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.github_token }}
