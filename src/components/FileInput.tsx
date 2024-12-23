@@ -23,7 +23,7 @@ export const FileInput = (props: {
       <TextField
         type="text"
         label="Select a file"
-        value={props.value}
+        value={props.value || ''}
         onClick={onTextFieldClick}
         slotProps={{
           input: {
