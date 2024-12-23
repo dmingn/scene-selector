@@ -9,7 +9,7 @@ import { StartEndSelector } from './components/StartEndSelector';
 import { trpc } from './trpc';
 
 const Content = () => {
-  const [filePath, setFilePath] = useState<string | null>('avsynctest.mp4');
+  const [filePath, setFilePath] = useState<string | null>(null);
 
   function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
     const file = event.target.files?.[0];
