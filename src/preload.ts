@@ -1,2 +1,7 @@
-// See the Electron documentation for details on how to use preload scripts:
-// https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
+import { contextBridge, webUtils } from 'electron';
+import { exposeElectronTRPC } from 'electron-trpc/main';
+
+process.once('loaded', async () => {
+  contextBridge.exposeInMainWorld('webUtils', webUtils);
+  exposeElectronTRPC();
+});
