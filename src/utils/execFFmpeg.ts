@@ -1,4 +1,4 @@
-import { exec } from 'child_process';
+import { execFile, ExecFileException } from 'child_process';
 import * as fs from 'fs';
 import * as os from 'os';
 
@@ -7,30 +7,31 @@ const ffprobe = require('ffprobe-static-electron'); // eslint-disable-line
 
 export const getVideoInfo = async (videoPath: string) => {
   return new Promise<{ frameCount: number; fps: number }>((resolve, reject) => {
-    const command = [
+    execFile(
       ffprobe.path,
-      '-v',
-      'error',
-      '-select_streams',
-      'v:0',
-      '-show_entries',
-      'stream=nb_frames,r_frame_rate',
-      '-of',
-      'json',
-      videoPath,
-    ].join(' ');
-
-    exec(command, (error, stdout) => {
-      if (error) {
-        reject(error);
-      } else {
-        const data = JSON.parse(stdout);
-        resolve({
-          frameCount: parseInt(data.streams[0].nb_frames),
-          fps: eval(data.streams[0].r_frame_rate),
-        });
-      }
-    });
+      [
+        '-v',
+        'error',
+        '-select_streams',
+        'v:0',
+        '-show_entries',
+        'stream=nb_frames,r_frame_rate',
+        '-of',
+        'json',
+        videoPath,
+      ],
+      (error: ExecFileException | null, stdout: string) => {
+        if (error) {
+          reject(error);
+        } else {
+          const data = JSON.parse(stdout);
+          resolve({
+            frameCount: parseInt(data.streams[0].nb_frames),
+            fps: eval(data.streams[0].r_frame_rate),
+          });
+        }
+      },
+    );
   });
 };
 
@@ -47,15 +48,27 @@ function imageToBase64(filePath: string): string {
 export const getFrameImage = async (videoPath: string, frameNumber: number) => {
   return new Promise<string>((resolve, reject) => {
     const tmpfile = os.tmpdir() + '/output.png';
-    const command = `${ffmpeg.path} -i ${videoPath} -vf "select=eq(n\\,${frameNumber})" -vsync vfr -y ${tmpfile}`;
 
-    exec(command, (error) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(tmpfile);
-      }
-    });
+    execFile(
+      ffmpeg.path,
+      [
+        '-i',
+        videoPath,
+        '-vf',
+        'select=eq(n\\,' + frameNumber + ')',
+        '-vsync',
+        'vfr',
+        '-y',
+        tmpfile,
+      ],
+      (error: ExecFileException | null) => {
+        if (error) {
+          reject(error);
+        } else {
+          resolve(tmpfile);
+        }
+      },
+    );
   });
 };
 
