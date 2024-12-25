@@ -6,3 +6,9 @@ bump-version:
 	npm install && \
 	git add -p package.json package-lock.json && \
 	git commit -m "Bump version"
+
+.PHONY: public
+public:
+	mkdir -p public
+	cp node_modules/ffmpeg-ffprobe-static/ffmpeg public/
+	cp node_modules/ffmpeg-ffprobe-static/ffprobe public/
