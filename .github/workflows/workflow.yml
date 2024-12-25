@@ -29,6 +29,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Copy ffmpeg binaries to public dir
+        run: make public
+
       - name: Publish
         run: npm run publish
         env:

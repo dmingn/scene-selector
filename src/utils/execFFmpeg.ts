@@ -2,13 +2,14 @@ import { execFile, ExecFileException } from 'child_process';
 import * as fs from 'fs';
 import * as os from 'os';
 
-const ffmpeg = require('ffmpeg-static-electron'); // eslint-disable-line
-const ffprobe = require('ffprobe-static-electron'); // eslint-disable-line
+// https://ja.vite.dev/guide/assets#the-public-directory
+const ffmpegPath = 'ffmpeg';
+const ffprobePath = 'ffprobe';
 
 export const getVideoInfo = async (videoPath: string) => {
   return new Promise<{ frameCount: number; fps: number }>((resolve, reject) => {
     execFile(
-      ffprobe.path,
+      ffprobePath,
       [
         '-v',
         'error',
@@ -50,7 +51,7 @@ export const getFrameImage = async (videoPath: string, frameNumber: number) => {
     const tmpfile = os.tmpdir() + '/output.png';
 
     execFile(
-      ffmpeg.path,
+      ffmpegPath,
       [
         '-i',
         videoPath,
