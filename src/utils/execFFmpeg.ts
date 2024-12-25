@@ -1,6 +1,6 @@
 import { execFile, ExecFileException } from 'child_process';
+import { app } from 'electron';
 import * as fs from 'fs';
-import * as os from 'os';
 
 // https://ja.vite.dev/guide/assets#the-public-directory
 const ffmpegPath = 'ffmpeg';
@@ -48,7 +48,7 @@ function imageToBase64(filePath: string): string {
 
 export const getFrameImage = async (videoPath: string, frameNumber: number) => {
   return new Promise<string>((resolve, reject) => {
-    const tmpfile = os.tmpdir() + '/output.png';
+    const tmpfile = app.getPath('temp') + '/output.png';
 
     execFile(
       ffmpegPath,
