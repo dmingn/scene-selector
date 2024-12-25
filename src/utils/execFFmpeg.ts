@@ -1,6 +1,7 @@
 import { execFile, ExecFileException } from 'child_process';
+import { app } from 'electron';
 import * as fs from 'fs';
-import * as os from 'os';
+import path from 'path';
 
 const resourcesPath =
   process.env.NODE_ENV === 'production' ? process.resourcesPath : 'resources';
@@ -50,7 +51,10 @@ function imageToBase64(filePath: string): string {
 
 export const getFrameImage = async (videoPath: string, frameNumber: number) => {
   return new Promise<string>((resolve, reject) => {
-    const tmpfile = os.tmpdir() + '/output.png';
+    const tmpfile = path.join(
+      app.getPath('temp'),
+      path.parse(videoPath).name + '-' + frameNumber + '.png',
+    );
 
     execFile(
       ffmpegPath,
