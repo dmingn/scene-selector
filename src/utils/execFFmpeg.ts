@@ -2,9 +2,11 @@ import { execFile, ExecFileException } from 'child_process';
 import * as fs from 'fs';
 import * as os from 'os';
 
-// https://ja.vite.dev/guide/assets#the-public-directory
-const ffmpegPath = 'ffmpeg';
-const ffprobePath = 'ffprobe';
+const resourcesPath =
+  process.env.NODE_ENV === 'production' ? process.resourcesPath : 'resources';
+
+const ffmpegPath = resourcesPath + '/bin/ffmpeg';
+const ffprobePath = resourcesPath + '/bin/ffprobe';
 
 export const getVideoInfo = async (videoPath: string) => {
   return new Promise<{ frameCount: number; fps: number }>((resolve, reject) => {
