@@ -43,6 +43,7 @@ export const CommandExample = (props: {
           inputLabel: { shrink: true },
         }}
         css={css({ width: '100%' })}
+        multiline
       />
     </div>
   );
