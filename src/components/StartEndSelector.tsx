@@ -3,7 +3,7 @@ import { css } from '@emotion/react';
 import { CircularProgress, Slider } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { trpc } from '../trpc';
-import { CommandPreview } from './CommandPreview';
+import { CommandExample } from './CommandExample';
 import { FrameView } from './FrameView';
 
 export const StartEndSelector = (props: { filePath: string }) => {
@@ -93,7 +93,7 @@ export const StartEndSelector = (props: { filePath: string }) => {
               width: '100%',
             })}
           >
-            <CommandPreview
+            <CommandExample
               filePath={props.filePath}
               fps={fps}
               startFrameNumber={startFrameNumber}

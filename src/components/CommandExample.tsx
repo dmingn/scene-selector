@@ -4,7 +4,7 @@ import { TextField } from '@mui/material';
 import { frameNumberToTimecode } from '../utils/frameNumberToTimecode';
 import { getOutPath } from '../utils/getOutPath';
 
-export const CommandPreview = (props: {
+export const CommandExample = (props: {
   filePath: string;
   fps: number;
   startFrameNumber: number;
