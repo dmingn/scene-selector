@@ -15,9 +15,7 @@ export const CommandExample = (props: {
     '-ss',
     frameNumberToTimecode(props.startFrameNumber, props.fps),
     '-i',
-    '"',
-    props.filePath,
-    '"',
+    `"${props.filePath}"`,
     '-to',
     frameNumberToTimecode(
       props.endFrameNumber - props.startFrameNumber,
@@ -25,9 +23,7 @@ export const CommandExample = (props: {
     ),
     '-c',
     'copy',
-    '"',
-    getOutPath(props.filePath, props.startFrameNumber, props.endFrameNumber),
-    '"',
+    `"${getOutPath(props.filePath, props.startFrameNumber, props.endFrameNumber)}"`,
   ].join(' ');
 
   return (
