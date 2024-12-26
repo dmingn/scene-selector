@@ -92,4 +92,4 @@ typings/
 out/
 
 # Video file for testing
-avsynctest.mp4
+avsynctest*.mp4
