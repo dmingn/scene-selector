@@ -1,6 +1,7 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { Slider } from '@mui/material';
+import { frameNumberToTimecode } from '../utils/frameNumberToTimecode';
 import { FrameView } from './FrameView';
 
 export const StartEndSelector = (props: {
@@ -56,6 +57,7 @@ export const StartEndSelector = (props: {
           value={[props.startFrameNumber, props.endFrameNumber]}
           onChange={handleRangeChange}
           valueLabelDisplay="auto"
+          valueLabelFormat={(value) => frameNumberToTimecode(value, props.fps)}
           min={0}
           max={props.frameCount - 1}
         />
