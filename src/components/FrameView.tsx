@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react';
+import { css, SerializedStyles } from '@emotion/react';
 import { FrameImage } from './FrameImage';
 import { FrameNumberControl } from './FrameNumberControl';
 
@@ -8,15 +8,20 @@ export const FrameView = (props: {
   fps: number;
   frameNumber: number;
   setFrameNumber: (frameNumber: number) => void;
+  className?: string;
+  css?: SerializedStyles;
 }) => {
   return (
     <div
-      css={css({
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '4px',
-      })}
-      {...props}
+      className={props.className}
+      css={[
+        css({
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '4px',
+        }),
+        props.css,
+      ]}
     >
       <FrameImage
         filePath={props.filePath}
