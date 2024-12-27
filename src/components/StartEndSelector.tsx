@@ -3,6 +3,7 @@ import { css } from '@emotion/react';
 import { CircularProgress, Slider } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { trpc } from '../trpc';
+import { frameNumberToTimecode } from '../utils/frameNumberToTimecode';
 import { CommandExample } from './CommandExample';
 import { FrameView } from './FrameView';
 
@@ -83,6 +84,7 @@ export const StartEndSelector = (props: { filePath: string }) => {
               value={[startFrameNumber, endFrameNumber]}
               onChange={handleRangeChange}
               valueLabelDisplay="auto"
+              valueLabelFormat={(value) => frameNumberToTimecode(value, fps)}
               min={0}
               max={frameCount - 1}
             />
