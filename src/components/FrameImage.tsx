@@ -5,11 +5,13 @@ import { trpc } from '../trpc';
 
 export const FrameImage = (props: {
   filePath: string;
+  fps: number;
   frameNumber: number;
 }) => {
   const { data: image, isLoading: imageIsLoading } =
     trpc.getFrameImageBase64.useQuery({
       path: props.filePath,
+      fps: props.fps,
       frameNumber: props.frameNumber,
     });
 

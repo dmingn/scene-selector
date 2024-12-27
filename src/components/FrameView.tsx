@@ -19,7 +19,11 @@ export const FrameView = (props: {
         width: '100%',
       })}
     >
-      <FrameImage filePath={props.filePath} frameNumber={props.frameNumber} />
+      <FrameImage
+        filePath={props.filePath}
+        fps={props.fps}
+        frameNumber={props.frameNumber}
+      />
       <FrameNumberControl
         fps={props.fps}
         frameNumber={props.frameNumber}

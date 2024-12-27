@@ -12,9 +12,11 @@ export const router = t.router({
       return await getVideoInfo(path);
     }),
   getFrameImageBase64: procedure
-    .input(z.object({ path: z.string(), frameNumber: z.number() }))
-    .query(async ({ input: { path, frameNumber } }) => {
-      return await getFrameImageBase64(path, frameNumber);
+    .input(
+      z.object({ path: z.string(), fps: z.number(), frameNumber: z.number() }),
+    )
+    .query(async ({ input: { path, fps, frameNumber } }) => {
+      return await getFrameImageBase64(path, fps, frameNumber);
     }),
 });
 

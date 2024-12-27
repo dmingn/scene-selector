@@ -2,6 +2,7 @@ import { execFile, ExecFileException } from 'child_process';
 import { app } from 'electron';
 import * as fs from 'fs';
 import path from 'path';
+import { frameNumberToTimecode } from './frameNumberToTimecode';
 
 const resourcesPath =
   process.env.NODE_ENV === 'production' ? process.resourcesPath : 'resources';
@@ -49,7 +50,11 @@ function imageToBase64(filePath: string): string {
   }
 }
 
-export const getFrameImage = async (videoPath: string, frameNumber: number) => {
+export const getFrameImage = async (
+  videoPath: string,
+  fps: number,
+  frameNumber: number,
+) => {
   return new Promise<string>((resolve, reject) => {
     const tmpfile = path.join(
       app.getPath('temp'),
@@ -59,10 +64,11 @@ export const getFrameImage = async (videoPath: string, frameNumber: number) => {
     execFile(
       ffmpegPath,
       [
+        '-ss',
+        frameNumberToTimecode(frameNumber, fps),
+        '-copyts',
         '-i',
         videoPath,
-        '-vf',
-        'select=eq(n\\,' + frameNumber + ')',
         '-frames:v',
         '1',
         '-y',
@@ -81,9 +87,10 @@ export const getFrameImage = async (videoPath: string, frameNumber: number) => {
 
 export const getFrameImageBase64 = async (
   videoPath: string,
+  fps: number,
   frameNumber: number,
 ) => {
-  return getFrameImage(videoPath, frameNumber).then((imagePath) => {
+  return getFrameImage(videoPath, fps, frameNumber).then((imagePath) => {
     return imageToBase64(imagePath);
   });
 };
