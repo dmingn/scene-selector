@@ -14,10 +14,9 @@ export const FrameView = (props: {
       css={css({
         display: 'flex',
         flexDirection: 'column',
-        margin: '8px',
-        maxWidth: '50%',
-        width: '100%',
+        gap: '4px',
       })}
+      {...props}
     >
       <FrameImage
         filePath={props.filePath}
