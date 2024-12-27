@@ -12,21 +12,23 @@ import { trpc } from './trpc';
 
 const Content = () => {
   const [filePath, setFilePath] = useState<string | null>(null);
-
-  function handleOnChange(event: React.ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0];
-
-    if (file) {
-      setFilePath(window.webUtils.getPathForFile(file));
-    }
-  }
-
-  const [frameCount, setFrameCount] = useState<number>(0);
-  const [fps, setFps] = useState<number>(0);
-
   const { data: videoInfo } = trpc.getVideoInfo.useQuery({
     path: filePath,
   });
+
+  const [frameCount, setFrameCount] = useState<number>(0);
+  const [fps, setFps] = useState<number>(0);
+  const [startFrameNumber, _setStartFrameNumber] = useState<number>(0);
+  const [endFrameNumber, _setEndFrameNumber] = useState<number>(0);
+
+  const setStartFrameNumber = (newValue: number) => {
+    _setStartFrameNumber(Math.max(0, Math.min(endFrameNumber, newValue)));
+  };
+  const setEndFrameNumber = (newValue: number) => {
+    _setEndFrameNumber(
+      Math.max(startFrameNumber, Math.min(frameCount - 1, newValue)),
+    );
+  };
 
   useEffect(() => {
     if (videoInfo) {
@@ -34,18 +36,6 @@ const Content = () => {
       setFps(videoInfo.fps);
     }
   }, [videoInfo]);
-
-  const [startFrameNumber, _setStartFrameNumber] = useState<number>(0);
-  const setStartFrameNumber = (newValue: number) => {
-    _setStartFrameNumber(Math.max(0, Math.min(endFrameNumber, newValue)));
-  };
-
-  const [endFrameNumber, _setEndFrameNumber] = useState<number>(0);
-  const setEndFrameNumber = (newValue: number) => {
-    _setEndFrameNumber(
-      Math.max(startFrameNumber, Math.min(frameCount - 1, newValue)),
-    );
-  };
 
   useEffect(() => {
     setFrameCount(0);
@@ -68,7 +58,16 @@ const Content = () => {
         height: '100%',
       })}
     >
-      <FileInput value={filePath} onChange={handleOnChange} />
+      <FileInput
+        value={filePath}
+        onChange={(event) => {
+          const file = event.target.files?.[0];
+
+          if (file) {
+            setFilePath(window.webUtils.getPathForFile(file));
+          }
+        }}
+      />
       {filePath &&
         (videoInfo ? (
           <StartEndSelector
