@@ -50,6 +50,17 @@ const Content = () => {
 
   return (
     <div
+      onDragOver={(event) => {
+        event.preventDefault();
+      }}
+      onDrop={(event) => {
+        event.preventDefault();
+        const file = event.dataTransfer.files?.[0];
+
+        if (file) {
+          setFilePath(window.webUtils.getPathForFile(file));
+        }
+      }}
       css={css({
         display: 'flex',
         flexDirection: 'column',
