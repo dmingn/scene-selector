@@ -48,9 +48,14 @@ const Content = () => {
   };
 
   useEffect(() => {
-    if (frameCount) {
-      setEndFrameNumber(frameCount);
-    }
+    setFrameCount(0);
+    setFps(0);
+    setStartFrameNumber(0);
+    setEndFrameNumber(0);
+  }, [filePath]);
+
+  useEffect(() => {
+    setEndFrameNumber(frameCount);
   }, [frameCount]);
 
   return (
