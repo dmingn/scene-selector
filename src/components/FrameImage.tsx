@@ -31,20 +31,11 @@ export const FrameImage = (props: {
         props.css,
       ]}
     >
-      {imageIsLoading && (
-        <CircularProgress
-          css={css({
-            width: '100%',
-          })}
-        />
-      )}
+      {imageIsLoading && <CircularProgress css={css({ width: '100%' })} />}
       {image && (
         <img
           src={'data:image/png;base64,' + image}
-          css={css({
-            width: '100%',
-            height: 'auto',
-          })}
+          css={css({ width: '100%', height: 'auto' })}
         />
       )}
     </div>
