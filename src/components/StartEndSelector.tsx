@@ -1,18 +1,19 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { Slider } from '@mui/material';
+import { useContext } from 'react';
+import { VideoContext } from '../contexts/VideoContext';
 import { frameNumberToTimecode } from '../utils/frameNumberToTimecode';
 import { FrameView } from './FrameView';
 
 export const StartEndSelector = (props: {
-  filePath: string;
-  fps: number;
-  frameCount: number;
   startFrameNumber: number;
   setStartFrameNumber: (newValue: number) => void;
   endFrameNumber: number;
   setEndFrameNumber: (newValue: number) => void;
 }) => {
+  const { frameCount, fps } = useContext(VideoContext);
+
   const handleRangeChange = (event: Event, newValue: number[]) => {
     props.setStartFrameNumber(newValue[0]);
     props.setEndFrameNumber(newValue[1]);
@@ -33,15 +34,11 @@ export const StartEndSelector = (props: {
         })}
       >
         <FrameView
-          filePath={props.filePath}
-          fps={props.fps}
           frameNumber={props.startFrameNumber}
           setFrameNumber={props.setStartFrameNumber}
           css={css({ maxWidth: '50%' })}
         />
         <FrameView
-          filePath={props.filePath}
-          fps={props.fps}
           frameNumber={props.endFrameNumber}
           setFrameNumber={props.setEndFrameNumber}
           css={css({ maxWidth: '50%' })}
@@ -57,9 +54,9 @@ export const StartEndSelector = (props: {
           value={[props.startFrameNumber, props.endFrameNumber]}
           onChange={handleRangeChange}
           valueLabelDisplay="auto"
-          valueLabelFormat={(value) => frameNumberToTimecode(value, props.fps)}
+          valueLabelFormat={(value) => frameNumberToTimecode(value, fps)}
           min={0}
-          max={props.frameCount - 1}
+          max={frameCount - 1}
         />
       </div>
     </div>

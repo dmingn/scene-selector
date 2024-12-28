@@ -4,8 +4,6 @@ import { FrameImage } from './FrameImage';
 import { FrameNumberControl } from './FrameNumberControl';
 
 export const FrameView = (props: {
-  filePath: string;
-  fps: number;
   frameNumber: number;
   setFrameNumber: (frameNumber: number) => void;
   className?: string;
@@ -23,13 +21,8 @@ export const FrameView = (props: {
         props.css,
       ]}
     >
-      <FrameImage
-        filePath={props.filePath}
-        fps={props.fps}
-        frameNumber={props.frameNumber}
-      />
+      <FrameImage frameNumber={props.frameNumber} />
       <FrameNumberControl
-        fps={props.fps}
         frameNumber={props.frameNumber}
         setFrameNumber={props.setFrameNumber}
       />
