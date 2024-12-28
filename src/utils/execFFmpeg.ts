@@ -10,6 +10,21 @@ const resourcesPath =
 const ffmpegPath = resourcesPath + '/bin/ffmpeg';
 const ffprobePath = resourcesPath + '/bin/ffprobe';
 
+const parseFrameRate = (fraction: string): number | null => {
+  const parts = fraction.split('/');
+
+  if (parts.length === 2) {
+    const numerator = parseFloat(parts[0]);
+    const denominator = parseFloat(parts[1]);
+
+    if (!isNaN(numerator) && !isNaN(denominator) && denominator !== 0) {
+      return numerator / denominator;
+    }
+  }
+
+  return null;
+};
+
 export const getVideoInfo = async (videoPath: string) => {
   return new Promise<{ frameCount: number; fps: number }>((resolve, reject) => {
     execFile(
@@ -32,7 +47,7 @@ export const getVideoInfo = async (videoPath: string) => {
           const data = JSON.parse(stdout);
           resolve({
             frameCount: parseInt(data.streams[0].nb_frames),
-            fps: eval(data.streams[0].r_frame_rate),
+            fps: parseFrameRate(data.streams[0].r_frame_rate),
           });
         }
       },
