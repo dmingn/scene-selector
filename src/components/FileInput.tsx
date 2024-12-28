@@ -1,10 +1,12 @@
-import { css } from '@emotion/react';
+import { css, SerializedStyles } from '@emotion/react';
 import { TextField } from '@mui/material';
 import { ChangeEventHandler, useRef } from 'react';
 
 export const FileInput = (props: {
   value: string;
   onChange: ChangeEventHandler<HTMLInputElement>;
+  className?: string;
+  css?: SerializedStyles;
 }) => {
   const inputRef = useRef<HTMLInputElement>(null);
   const onTextFieldClick = () => {
@@ -12,7 +14,7 @@ export const FileInput = (props: {
   };
 
   return (
-    <div>
+    <div className={props.className} css={props.css}>
       <input
         type="file"
         onChange={props.onChange}
