@@ -38,14 +38,14 @@ export const StartEndSelector = (props: {
           setFrameNumber={props.setStartFrameNumber}
           frameNumberMin={0}
           frameNumberMax={props.endFrameNumber}
-          css={css({ maxWidth: '50%' })}
+          css={css({ flex: 1 })}
         />
         <FrameView
           frameNumber={props.endFrameNumber}
           setFrameNumber={props.setEndFrameNumber}
           frameNumberMin={props.startFrameNumber}
           frameNumberMax={frameCount - 1}
-          css={css({ maxWidth: '50%' })}
+          css={css({ flex: 1 })}
         />
       </div>
       <div
