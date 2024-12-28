@@ -1,5 +1,3 @@
-/** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react';
 import { TextField, Tooltip } from '@mui/material';
 import { useContext, useState } from 'react';
 import { VideoContext } from '../contexts/VideoContext';
@@ -29,30 +27,27 @@ export const CommandExample = (props: {
   const [copied, setCopied] = useState(false);
 
   return (
-    <div css={css({ width: '100%' })}>
-      <Tooltip
-        placement="top"
-        title={copied ? 'Copied' : 'Click to copy'}
-        onClose={() => setCopied(false)}
-      >
-        <TextField
-          type="text"
-          label="FFmpeg command example"
-          value={command}
-          slotProps={{
-            input: {
-              readOnly: true,
-            },
-            inputLabel: { shrink: true },
-          }}
-          css={css({ width: '100%' })}
-          multiline
-          onClick={() => {
-            navigator.clipboard.writeText(command);
-            setCopied(true);
-          }}
-        />
-      </Tooltip>
-    </div>
+    <Tooltip
+      placement="top"
+      title={copied ? 'Copied' : 'Click to copy'}
+      onClose={() => setCopied(false)}
+    >
+      <TextField
+        type="text"
+        label="FFmpeg command example"
+        value={command}
+        slotProps={{
+          input: {
+            readOnly: true,
+          },
+          inputLabel: { shrink: true },
+        }}
+        multiline
+        onClick={() => {
+          navigator.clipboard.writeText(command);
+          setCopied(true);
+        }}
+      />
+    </Tooltip>
   );
 };

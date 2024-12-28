@@ -28,7 +28,7 @@ export const FrameView = (props: {
         props.css,
       ]}
     >
-      <FrameImage frameNumber={props.frameNumber} />
+      <FrameImage frameNumber={props.frameNumber} css={css({ flex: 1 })} />
       <FrameNumberControl
         frameNumber={props.frameNumber}
         setFrameNumber={props.setFrameNumber}

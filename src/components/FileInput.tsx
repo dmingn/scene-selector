@@ -13,7 +13,7 @@ export const FileInput = (props: {
   };
 
   return (
-    <div css={css({ width: '100%' })}>
+    <div>
       <input
         type="file"
         onChange={props.onChange}

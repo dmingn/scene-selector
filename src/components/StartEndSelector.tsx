@@ -20,12 +20,7 @@ export const StartEndSelector = (props: {
   };
 
   return (
-    <div
-      css={css({
-        display: 'flex',
-        flexDirection: 'column',
-      })}
-    >
+    <div css={css({ display: 'flex', flexDirection: 'column', gap: '8px' })}>
       <div
         css={css({
           display: 'flex',
@@ -38,22 +33,17 @@ export const StartEndSelector = (props: {
           setFrameNumber={props.setStartFrameNumber}
           frameNumberMin={0}
           frameNumberMax={props.endFrameNumber}
-          css={css({ maxWidth: '50%' })}
+          css={css({ flex: 1 })}
         />
         <FrameView
           frameNumber={props.endFrameNumber}
           setFrameNumber={props.setEndFrameNumber}
           frameNumberMin={props.startFrameNumber}
           frameNumberMax={frameCount - 1}
-          css={css({ maxWidth: '50%' })}
+          css={css({ flex: 1 })}
         />
       </div>
-      <div
-        css={css({
-          marginTop: '8px',
-          padding: '0px 16px',
-        })}
-      >
+      <div css={css({ padding: '0px 16px' })}>
         <Slider
           value={[props.startFrameNumber, props.endFrameNumber]}
           onChange={handleRangeChange}

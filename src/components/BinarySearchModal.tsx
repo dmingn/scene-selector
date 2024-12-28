@@ -26,7 +26,7 @@ const FrameImageAndSelectButton = (props: {
         props.css,
       ]}
     >
-      <FrameImage frameNumber={props.frameNumber} />
+      <FrameImage frameNumber={props.frameNumber} css={css({ flex: 1 })} />
       <div>{props.frameNumber}</div>
       <div>{frameNumberToTimecode(props.frameNumber, props.fps)}</div>
       <Button
@@ -79,7 +79,7 @@ export const BinarySearchModal = (props: {
           css={css({
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'center',
+            alignItems: 'stretch',
             gap: '8px',
           })}
         >

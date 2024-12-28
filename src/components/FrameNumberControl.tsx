@@ -41,7 +41,7 @@ const AddSubButtonGroup = (props: {
   type: 'frame' | 'second';
 }) => {
   return (
-    <ButtonGroup css={css({ margin: '4px' })}>
+    <ButtonGroup>
       {props.diffs.map((diff) => (
         <AddSubButton
           frameNumber={props.frameNumber}
@@ -63,7 +63,7 @@ export const FrameNumberControl = (props: {
   const { fps } = useContext(VideoContext);
 
   return (
-    <div>
+    <div css={css({ display: 'flex', flexDirection: 'column', gap: '4px' })}>
       <div
         css={css({
           display: 'flex',
