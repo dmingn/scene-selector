@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
-import { CircularProgress } from '@mui/material';
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import { Button, CircularProgress, Tooltip } from '@mui/material';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ipcLink } from 'electron-trpc/renderer';
 import { useEffect, useState } from 'react';
@@ -30,6 +31,11 @@ const Content = () => {
     );
   };
 
+  const resetStartEnd = () => {
+    setStartFrameNumber(0);
+    setEndFrameNumber(frameCount ? frameCount - 1 : 0);
+  };
+
   useEffect(() => {
     if (videoInfo) {
       setFrameCount(videoInfo.frameCount);
@@ -40,12 +46,11 @@ const Content = () => {
   useEffect(() => {
     setFrameCount(0);
     setFps(0);
-    setStartFrameNumber(0);
-    setEndFrameNumber(0);
+    resetStartEnd();
   }, [filePath]);
 
   useEffect(() => {
-    setEndFrameNumber(frameCount);
+    resetStartEnd();
   }, [frameCount]);
 
   return (
@@ -70,16 +75,26 @@ const Content = () => {
           height: '100%',
         })}
       >
-        <FileInput
-          value={filePath}
-          onChange={(event) => {
-            const file = event.target.files?.[0];
+        <div css={css({ display: 'flex', gap: '8px' })}>
+          <FileInput
+            value={filePath}
+            onChange={(event) => {
+              const file = event.target.files?.[0];
 
-            if (file) {
-              setFilePath(window.webUtils.getPathForFile(file));
-            }
-          }}
-        />
+              if (file) {
+                setFilePath(window.webUtils.getPathForFile(file));
+              }
+            }}
+            css={css({ flex: 1 })}
+          />
+          {filePath && (
+            <Tooltip title="Reset">
+              <Button variant="outlined" onClick={resetStartEnd}>
+                <RestartAltIcon />
+              </Button>
+            </Tooltip>
+          )}
+        </div>
         {filePath &&
           (videoInfo ? (
             <StartEndSelector
