@@ -8,6 +8,7 @@ import { createRoot } from 'react-dom/client';
 import { CommandExample } from './components/CommandExample';
 import { FileInput } from './components/FileInput';
 import { StartEndSelector } from './components/StartEndSelector';
+import { VideoContext } from './contexts/VideoContext';
 import { trpc } from './trpc';
 
 const Content = () => {
@@ -49,62 +50,59 @@ const Content = () => {
   }, [frameCount]);
 
   return (
-    <div
-      onDragOver={(event) => {
-        event.preventDefault();
-      }}
-      onDrop={(event) => {
-        event.preventDefault();
-        const file = event.dataTransfer.files?.[0];
-
-        if (file) {
-          setFilePath(window.webUtils.getPathForFile(file));
-        }
-      }}
-      css={css({
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: filePath ? 'space-between' : 'center',
-        gap: '16px',
-        height: '100%',
-      })}
-    >
-      <FileInput
-        value={filePath}
-        onChange={(event) => {
-          const file = event.target.files?.[0];
+    <VideoContext.Provider value={{ filePath, frameCount, fps }}>
+      <div
+        onDragOver={(event) => {
+          event.preventDefault();
+        }}
+        onDrop={(event) => {
+          event.preventDefault();
+          const file = event.dataTransfer.files?.[0];
 
           if (file) {
             setFilePath(window.webUtils.getPathForFile(file));
           }
         }}
-      />
-      {filePath &&
-        (videoInfo ? (
-          <StartEndSelector
-            filePath={filePath}
-            fps={fps}
-            frameCount={frameCount}
-            startFrameNumber={startFrameNumber}
-            setStartFrameNumber={setStartFrameNumber}
-            endFrameNumber={endFrameNumber}
-            setEndFrameNumber={setEndFrameNumber}
-          />
-        ) : (
-          <CircularProgress />
-        ))}
-      {filePath &&
-        (videoInfo ? (
-          <CommandExample
-            filePath={filePath}
-            fps={fps}
-            startFrameNumber={startFrameNumber}
-            endFrameNumber={endFrameNumber}
-          />
-        ) : (
-          <></>
-        ))}
-    </div>
+        css={css({
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: filePath ? 'space-between' : 'center',
+          gap: '16px',
+          height: '100%',
+        })}
+      >
+        <FileInput
+          value={filePath}
+          onChange={(event) => {
+            const file = event.target.files?.[0];
+
+            if (file) {
+              setFilePath(window.webUtils.getPathForFile(file));
+            }
+          }}
+        />
+        {filePath &&
+          (videoInfo ? (
+            <StartEndSelector
+              startFrameNumber={startFrameNumber}
+              setStartFrameNumber={setStartFrameNumber}
+              endFrameNumber={endFrameNumber}
+              setEndFrameNumber={setEndFrameNumber}
+            />
+          ) : (
+            <CircularProgress />
+          ))}
+        {filePath &&
+          (videoInfo ? (
+            <CommandExample
+              startFrameNumber={startFrameNumber}
+              endFrameNumber={endFrameNumber}
+            />
+          ) : (
+            <></>
+          ))}
+      </div>
+    </VideoContext.Provider>
   );
 };
 

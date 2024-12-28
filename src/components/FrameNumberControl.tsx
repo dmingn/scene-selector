@@ -1,6 +1,8 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { Button, ButtonGroup } from '@mui/material';
+import { useContext } from 'react';
+import { VideoContext } from '../contexts/VideoContext';
 import { frameNumberToTimecode } from '../utils/frameNumberToTimecode';
 
 const AddSubButton = (props: {
@@ -55,10 +57,11 @@ const AddSubButtonGroup = (props: {
 };
 
 export const FrameNumberControl = (props: {
-  fps: number;
   frameNumber: number;
   setFrameNumber: (frameNumber: number) => void;
 }) => {
+  const { fps } = useContext(VideoContext);
+
   return (
     <div>
       <div
@@ -72,7 +75,7 @@ export const FrameNumberControl = (props: {
           frameNumber={props.frameNumber}
           setFrameNumber={props.setFrameNumber}
           diffs={[-10, -5, -1]}
-          fps={props.fps}
+          fps={fps}
           type="frame"
         />
         <div>{props.frameNumber}</div>
@@ -80,7 +83,7 @@ export const FrameNumberControl = (props: {
           frameNumber={props.frameNumber}
           setFrameNumber={props.setFrameNumber}
           diffs={[1, 5, 10]}
-          fps={props.fps}
+          fps={fps}
           type="frame"
         />
       </div>
@@ -95,15 +98,15 @@ export const FrameNumberControl = (props: {
           frameNumber={props.frameNumber}
           setFrameNumber={props.setFrameNumber}
           diffs={[-10, -5, -1]}
-          fps={props.fps}
+          fps={fps}
           type="second"
         />
-        <div>{frameNumberToTimecode(props.frameNumber, props.fps)}</div>
+        <div>{frameNumberToTimecode(props.frameNumber, fps)}</div>
         <AddSubButtonGroup
           frameNumber={props.frameNumber}
           setFrameNumber={props.setFrameNumber}
           diffs={[1, 5, 10]}
-          fps={props.fps}
+          fps={fps}
           type="second"
         />
       </div>

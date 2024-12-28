@@ -1,17 +1,17 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { CircularProgress } from '@mui/material';
+import { useContext } from 'react';
+import { VideoContext } from '../contexts/VideoContext';
 import { trpc } from '../trpc';
 
-export const FrameImage = (props: {
-  filePath: string;
-  fps: number;
-  frameNumber: number;
-}) => {
+export const FrameImage = (props: { frameNumber: number }) => {
+  const { filePath, fps } = useContext(VideoContext);
+
   const { data: image, isLoading: imageIsLoading } =
     trpc.getFrameImageBase64.useQuery({
-      path: props.filePath,
-      fps: props.fps,
+      path: filePath,
+      fps: fps,
       frameNumber: props.frameNumber,
     });
 

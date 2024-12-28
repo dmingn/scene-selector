@@ -1,28 +1,29 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
 import { TextField, Tooltip } from '@mui/material';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { VideoContext } from '../contexts/VideoContext';
 import { frameNumberToTimecode } from '../utils/frameNumberToTimecode';
 import { getOutPath } from '../utils/getOutPath';
 
 export const CommandExample = (props: {
-  filePath: string;
-  fps: number;
   startFrameNumber: number;
   endFrameNumber: number;
 }) => {
+  const { filePath, fps } = useContext(VideoContext);
+
   const command = [
     'ffmpeg',
     '-ss',
-    frameNumberToTimecode(props.startFrameNumber, props.fps),
+    frameNumberToTimecode(props.startFrameNumber, fps),
     '-i',
-    `"${props.filePath}"`,
+    `"${filePath}"`,
     '-to',
     frameNumberToTimecode(
       props.endFrameNumber - props.startFrameNumber + 1,
-      props.fps,
+      fps,
     ),
-    `"${getOutPath(props.filePath, props.startFrameNumber, props.endFrameNumber)}"`,
+    `"${getOutPath(filePath, props.startFrameNumber, props.endFrameNumber)}"`,
   ].join(' ');
 
   const [copied, setCopied] = useState(false);
