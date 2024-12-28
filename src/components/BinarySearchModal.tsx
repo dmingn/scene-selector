@@ -1,4 +1,3 @@
-/** @jsxImportSource @emotion/react */
 import { css, SerializedStyles } from '@emotion/react';
 import { Button, Dialog } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
