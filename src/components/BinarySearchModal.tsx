@@ -42,7 +42,7 @@ const FrameImageAndSelectButton = (props: {
 
 export const BinarySearchModal = (props: {
   open: boolean;
-  onClose: (value: number) => void;
+  onClose: (value: number | null) => void;
   leftFrameNumber: number;
   rightFrameNumber: number;
 }) => {
@@ -64,7 +64,14 @@ export const BinarySearchModal = (props: {
   }, [props.open]);
 
   return (
-    <Dialog open={props.open} fullWidth maxWidth="xl">
+    <Dialog
+      open={props.open}
+      onClose={() => {
+        props.onClose(null);
+      }}
+      fullWidth
+      maxWidth="xl"
+    >
       <div
         css={css({
           display: 'flex',
