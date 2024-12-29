@@ -1,3 +1,4 @@
+import { css } from '@emotion/react';
 import { FormControlLabel, Switch, TextField, Tooltip } from '@mui/material';
 import { useContext, useState } from 'react';
 import { VideoContext } from '../contexts/VideoContext';
@@ -58,6 +59,7 @@ export const CommandExample = (props: {
             navigator.clipboard.writeText(command);
             setCopied(true);
           }}
+          css={css({ '.MuiInputBase-root': { flex: 1 } })}
         />
       </Tooltip>
       <div
