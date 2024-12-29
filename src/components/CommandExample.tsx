@@ -1,3 +1,4 @@
+import { css } from '@emotion/react';
 import { FormControlLabel, Switch, TextField, Tooltip } from '@mui/material';
 import { useContext, useState } from 'react';
 import { VideoContext } from '../contexts/VideoContext';
@@ -10,6 +11,7 @@ export const CommandExample = (props: {
   endFrameNumber: number;
 }) => {
   const { filePath, fps } = useContext(VideoContext);
+  const [copyCodec, setCopyCodec] = useState(false);
   const [wsl, setWsl] = useState(false);
 
   const filePathConverted = wsl ? convertWinPathToWSL(filePath) : filePath;
@@ -25,8 +27,12 @@ export const CommandExample = (props: {
       props.endFrameNumber - props.startFrameNumber + 1,
       fps,
     ),
-    `"${getOutPath(filePathConverted, props.startFrameNumber, props.endFrameNumber)}"`,
-  ].join(' ');
+  ]
+    .concat(copyCodec ? ['-c', 'copy'] : [])
+    .concat([
+      `"${getOutPath(filePathConverted, props.startFrameNumber, props.endFrameNumber)}"`,
+    ])
+    .join(' ');
 
   const [copied, setCopied] = useState(false);
 
@@ -53,21 +59,41 @@ export const CommandExample = (props: {
             navigator.clipboard.writeText(command);
             setCopied(true);
           }}
+          css={css({ '.MuiInputBase-root': { flex: 1 } })}
         />
       </Tooltip>
-      {window.platform === 'win32' && (
+      <div
+        css={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+        }}
+      >
         <FormControlLabel
           control={
             <Switch
-              checked={wsl}
+              checked={copyCodec}
               onChange={(event) => {
-                setWsl(event.target.checked);
+                setCopyCodec(event.target.checked);
               }}
             />
           }
-          label="WSL"
+          label="Copy Codec"
         />
-      )}
+        {window.platform === 'win32' && (
+          <FormControlLabel
+            control={
+              <Switch
+                checked={wsl}
+                onChange={(event) => {
+                  setWsl(event.target.checked);
+                }}
+              />
+            }
+            label="WSL"
+          />
+        )}
+      </div>
     </div>
   );
 };
