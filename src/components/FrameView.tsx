@@ -44,7 +44,9 @@ export const FrameView = (props: {
         open={openBinarySearchModal}
         onClose={(value) => {
           setOpenBinarySearchModal(false);
-          props.setFrameNumber(value);
+          if (value !== null) {
+            props.setFrameNumber(value);
+          }
         }}
         leftFrameNumber={props.frameNumberMin}
         rightFrameNumber={props.frameNumberMax}
