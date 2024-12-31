@@ -3,12 +3,16 @@ import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { Button, CircularProgress, Tooltip } from '@mui/material';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ipcLink } from 'electron-trpc/renderer';
-import { useEffect, useState } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { CommandExample } from './components/CommandExample';
 import { FileInput } from './components/FileInput';
 import { StartEndSelector } from './components/StartEndSelector';
 import { VideoContext } from './contexts/VideoContext';
+import {
+  frameNumbersInitialState,
+  frameNumbersReducer,
+} from './reducers/frameNumbersReducer';
 import { trpc } from './trpc';
 import { clamp } from './utils/clamp';
 
@@ -20,6 +24,12 @@ const Content = () => {
 
   const [frameCount, setFrameCount] = useState<number>(0);
   const [fps, setFps] = useState<number>(0);
+
+  const [frameNumbers, dispatchFrameNumbers] = useReducer(
+    frameNumbersReducer,
+    frameNumbersInitialState,
+  );
+
   const [startFrameNumber, _setStartFrameNumber] = useState<number>(0);
   const [endFrameNumber, _setEndFrameNumber] = useState<number>(0);
 
