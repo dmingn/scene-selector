@@ -10,10 +10,7 @@ import { FileInput } from './components/FileInput';
 import { StartEndSelector } from './components/StartEndSelector';
 import { VideoContext } from './contexts/VideoContext';
 import { trpc } from './trpc';
-
-const clamp = (value: number, min: number, max: number) => {
-  return Math.max(min, Math.min(value, max));
-};
+import { clamp } from './utils/clamp';
 
 const Content = () => {
   const [filePath, setFilePath] = useState<string | null>(null);
