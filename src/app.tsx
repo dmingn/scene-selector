@@ -11,6 +11,10 @@ import { StartEndSelector } from './components/StartEndSelector';
 import { VideoContext } from './contexts/VideoContext';
 import { trpc } from './trpc';
 
+const clamp = (value: number, min: number, max: number) => {
+  return Math.max(min, Math.min(value, max));
+};
+
 const Content = () => {
   const [filePath, setFilePath] = useState<string | null>(null);
   const { data: videoInfo } = trpc.getVideoInfo.useQuery({
@@ -23,12 +27,10 @@ const Content = () => {
   const [endFrameNumber, _setEndFrameNumber] = useState<number>(0);
 
   const setStartFrameNumber = (newValue: number) => {
-    _setStartFrameNumber(Math.max(0, Math.min(endFrameNumber, newValue)));
+    _setStartFrameNumber(clamp(newValue, 0, endFrameNumber));
   };
   const setEndFrameNumber = (newValue: number) => {
-    _setEndFrameNumber(
-      Math.max(startFrameNumber, Math.min(frameCount - 1, newValue)),
-    );
+    _setEndFrameNumber(clamp(newValue, startFrameNumber, frameCount - 1));
   };
 
   const resetStartEnd = () => {
