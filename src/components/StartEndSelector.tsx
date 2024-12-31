@@ -50,6 +50,7 @@ export const StartEndSelector = (props: {
           valueLabelFormat={(value) => frameNumberToTimecode(value, fps)}
           min={0}
           max={frameCount - 1}
+          disableSwap
         />
       </div>
     </div>
