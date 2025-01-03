@@ -12,11 +12,16 @@ export const FrameImage = (props: {
   const { filePath, fps } = useContext(VideoContext);
 
   const { data: image, isLoading: imageIsLoading } =
-    trpc.getFrameImageBase64.useQuery({
-      path: filePath,
-      fps: fps,
-      frameNumber: props.frameNumber,
-    });
+    trpc.getFrameImageBase64.useQuery(
+      {
+        path: filePath,
+        fps: fps,
+        frameNumber: props.frameNumber,
+      },
+      {
+        enabled: !!filePath && !!fps && props.frameNumber != null,
+      },
+    );
 
   return (
     <div
