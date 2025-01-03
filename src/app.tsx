@@ -14,7 +14,6 @@ import {
   frameNumbersReducer,
 } from './reducers/frameNumbersReducer';
 import { trpc } from './trpc';
-import { clamp } from './utils/clamp';
 
 const Content = () => {
   const [filePath, setFilePath] = useState<string | null>(null);
@@ -30,21 +29,6 @@ const Content = () => {
     frameNumbersInitialState,
   );
 
-  const [startFrameNumber, _setStartFrameNumber] = useState<number>(0);
-  const [endFrameNumber, _setEndFrameNumber] = useState<number>(0);
-
-  const setStartFrameNumber = (newValue: number) => {
-    _setStartFrameNumber(clamp(newValue, 0, endFrameNumber));
-  };
-  const setEndFrameNumber = (newValue: number) => {
-    _setEndFrameNumber(clamp(newValue, startFrameNumber, frameCount - 1));
-  };
-
-  const resetStartEnd = () => {
-    setStartFrameNumber(0);
-    setEndFrameNumber(frameCount ? frameCount - 1 : 0);
-  };
-
   useEffect(() => {
     if (videoInfo) {
       setFrameCount(videoInfo.frameCount);
@@ -55,11 +39,11 @@ const Content = () => {
   useEffect(() => {
     setFrameCount(0);
     setFps(0);
-    resetStartEnd();
+    dispatchFrameNumbers({ type: 'RESET', frameCount: frameCount });
   }, [filePath]);
 
   useEffect(() => {
-    resetStartEnd();
+    dispatchFrameNumbers({ type: 'RESET', frameCount: frameCount });
   }, [frameCount]);
 
   return (
@@ -98,7 +82,15 @@ const Content = () => {
           />
           {filePath && (
             <Tooltip title="Reset">
-              <Button variant="outlined" onClick={resetStartEnd}>
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  dispatchFrameNumbers({
+                    type: 'RESET',
+                    frameCount: frameCount,
+                  });
+                }}
+              >
                 <RestartAltIcon />
               </Button>
             </Tooltip>
@@ -107,10 +99,14 @@ const Content = () => {
         {filePath &&
           (videoInfo ? (
             <StartEndSelector
-              startFrameNumber={startFrameNumber}
-              setStartFrameNumber={setStartFrameNumber}
-              endFrameNumber={endFrameNumber}
-              setEndFrameNumber={setEndFrameNumber}
+              startFrameNumber={frameNumbers.start}
+              setStartFrameNumber={(newValue) => {
+                dispatchFrameNumbers({ type: 'SET_START', newValue });
+              }}
+              endFrameNumber={frameNumbers.end}
+              setEndFrameNumber={(newValue) => {
+                dispatchFrameNumbers({ type: 'SET_END', newValue });
+              }}
             />
           ) : (
             <CircularProgress />
@@ -118,8 +114,8 @@ const Content = () => {
         {filePath &&
           (videoInfo ? (
             <CommandExample
-              startFrameNumber={startFrameNumber}
-              endFrameNumber={endFrameNumber}
+              startFrameNumber={frameNumbers.start}
+              endFrameNumber={frameNumbers.end}
             />
           ) : (
             <></>
