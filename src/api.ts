@@ -7,25 +7,15 @@ const procedure = t.procedure;
 
 export const router = t.router({
   getVideoInfo: procedure
-    .input(z.object({ path: z.string().nullish() }))
+    .input(z.object({ path: z.string() }))
     .query(async ({ input: { path } }) => {
-      if (!path) {
-        return null;
-      }
       return await getVideoInfo(path);
     }),
   getFrameImageBase64: procedure
     .input(
-      z.object({
-        path: z.string().nullish(),
-        fps: z.number().nullish(),
-        frameNumber: z.number().nullish(),
-      }),
+      z.object({ path: z.string(), fps: z.number(), frameNumber: z.number() }),
     )
     .query(async ({ input: { path, fps, frameNumber } }) => {
-      if (!path || !fps || frameNumber === null || frameNumber === undefined) {
-        return null;
-      }
       return await getFrameImageBase64(path, fps, frameNumber);
     }),
 });
