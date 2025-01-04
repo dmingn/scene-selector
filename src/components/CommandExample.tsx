@@ -4,7 +4,7 @@ import { useContext, useState } from 'react';
 import { convertWinPathToWSL } from '../utils/convertWinPathToWSL';
 import { frameNumberToTimecode } from '../utils/frameNumberToTimecode';
 import { getOutPath } from '../utils/getOutPath';
-import { VideoInfoContext } from './VideoInfoContextsProvider';
+import { VideoInfoContext } from './context-providers/VideoInfoContextsProvider';
 
 export const CommandExample = (props: {
   startFrameNumber: number;

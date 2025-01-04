@@ -4,14 +4,14 @@ import { Button, CircularProgress, Tooltip } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { CommandExample } from './components/CommandExample';
-import { FileInput } from './components/FileInput';
-import { StartEndSelector } from './components/StartEndSelector';
-import { TrpcContextsProvider } from './components/TrpcContextsProvider';
+import { TrpcContextsProvider } from './components/context-providers/TrpcContextsProvider';
 import {
   VideoInfoContext,
   VideoInfoContextsProvider,
   VideoInfoSetFilePathContext,
-} from './components/VideoInfoContextsProvider';
+} from './components/context-providers/VideoInfoContextsProvider';
+import { FileInput } from './components/FileInput';
+import { StartEndSelector } from './components/StartEndSelector';
 import { clamp } from './utils/clamp';
 
 const Content = () => {

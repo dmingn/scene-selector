@@ -3,7 +3,7 @@ import { Button, Dialog } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
 import { frameNumberToTimecode } from '../utils/frameNumberToTimecode';
 import { FrameImage } from './FrameImage';
-import { VideoInfoContext } from './VideoInfoContextsProvider';
+import { VideoInfoContext } from './context-providers/VideoInfoContextsProvider';
 
 const FrameImageAndSelectButton = (props: {
   fps: number;

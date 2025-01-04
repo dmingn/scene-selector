@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ipcLink } from 'electron-trpc/renderer';
 import { ReactNode, useState } from 'react';
-import { trpc } from '../trpc';
+import { trpc } from '../../trpc';
 
 export const TrpcContextsProvider = (props: { children: ReactNode }) => {
   const [queryClient] = useState(

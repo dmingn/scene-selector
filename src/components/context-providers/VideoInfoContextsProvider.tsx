@@ -1,11 +1,11 @@
 import { createContext, ReactNode, useEffect, useReducer } from 'react';
-import { getVideoInfoInputSchema } from '../apiSchema';
+import { getVideoInfoInputSchema } from '../../apiSchema';
 import {
   VideoInfo,
   videoInfoInitialState,
   videoInfoReducer,
-} from '../states/videoInfo';
-import { trpc } from '../trpc';
+} from '../../states/videoInfo';
+import { trpc } from '../../trpc';
 
 export const VideoInfoContext = createContext<VideoInfo>(null);
 
