@@ -7,11 +7,10 @@ import {
 } from '../states/videoInfo';
 import { trpc } from '../trpc';
 
-export const VideoInfoContext = createContext<VideoInfo>(videoInfoInitialState);
+export const VideoInfoContext = createContext<VideoInfo>(null);
 
-export const VideoInfoSetFilePathContext = createContext<
-  (filePath: string) => void
->(() => {});
+export const VideoInfoSetFilePathContext =
+  createContext<(filePath: string) => void>(null);
 
 export const VideoInfoContextsProvider = (props: { children: ReactNode }) => {
   const [videoInfo, dispatchVideoInfo] = useReducer(
