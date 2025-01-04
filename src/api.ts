@@ -15,8 +15,8 @@ export const router = t.router({
     .input(
       z.object({
         videoPath: z.string(),
-        fps: z.number(),
-        frameNumber: z.number(),
+        fps: z.number().positive(),
+        frameNumber: z.number().int().nonnegative(),
       }),
     )
     .query(async ({ input: { videoPath, fps, frameNumber } }) => {
