@@ -15,7 +15,7 @@ import { clamp } from './utils/clamp';
 const Content = () => {
   const [filePath, setFilePath] = useState<string | null>(null);
   const { data: videoInfo } = trpc.getVideoInfo.useQuery(
-    { path: filePath },
+    { videoPath: filePath },
     { enabled: !!filePath },
   );
 

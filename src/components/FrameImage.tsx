@@ -14,7 +14,7 @@ export const FrameImage = (props: {
   const { data: image, isLoading: imageIsLoading } =
     trpc.getFrameImageBase64.useQuery(
       {
-        path: filePath,
+        videoPath: filePath,
         fps: fps,
         frameNumber: props.frameNumber,
       },
