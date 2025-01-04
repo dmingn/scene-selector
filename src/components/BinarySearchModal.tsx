@@ -1,6 +1,10 @@
 import { css, SerializedStyles } from '@emotion/react';
 import { Button, Dialog } from '@mui/material';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useReducer } from 'react';
+import {
+  binarySearchInitialState,
+  binarySearchReducer,
+} from '../states/binarySearchState';
 import { frameNumberToTimecode } from '../utils/frameNumberToTimecode';
 import { FrameImage } from './FrameImage';
 import { VideoInfoContext } from './context-providers/VideoInfoContextsProvider';
@@ -48,18 +52,18 @@ export const BinarySearchModal = (props: {
 }) => {
   const { fps } = useContext(VideoInfoContext);
 
-  const [leftFrameNumber, setLeftFrameNumber] = useState<number>(0);
-  const [midFrameNumber, setMidFrameNumber] = useState<number>(0);
-  const [rightFrameNumber, setRightFrameNumber] = useState<number>(0);
-
-  useEffect(() => {
-    setMidFrameNumber(Math.floor((leftFrameNumber + rightFrameNumber) / 2));
-  }, [leftFrameNumber, rightFrameNumber]);
+  const [binarySearchState, dispatchBinarySearch] = useReducer(
+    binarySearchReducer,
+    binarySearchInitialState,
+  );
 
   useEffect(() => {
     if (props.open) {
-      setLeftFrameNumber(props.leftFrameNumber);
-      setRightFrameNumber(props.rightFrameNumber);
+      dispatchBinarySearch({
+        type: 'RESET',
+        left: props.leftFrameNumber,
+        right: props.rightFrameNumber,
+      });
     }
   }, [props.open]);
 
@@ -91,20 +95,20 @@ export const BinarySearchModal = (props: {
         >
           <FrameImageAndSelectButton
             fps={fps}
-            frameNumber={leftFrameNumber}
+            frameNumber={binarySearchState.left}
             onSelect={props.onClose}
             css={css({ flex: 1 })}
           />
           <FrameImageAndSelectButton
             fps={fps}
-            frameNumber={midFrameNumber}
+            frameNumber={binarySearchState.mid}
             onSelect={props.onClose}
             css={css({ flex: 1 })}
           />
 
           <FrameImageAndSelectButton
             fps={fps}
-            frameNumber={rightFrameNumber}
+            frameNumber={binarySearchState.right}
             onSelect={props.onClose}
             css={css({ flex: 1 })}
           />
@@ -120,7 +124,7 @@ export const BinarySearchModal = (props: {
           <Button
             variant="outlined"
             onClick={() => {
-              setRightFrameNumber(midFrameNumber);
+              dispatchBinarySearch({ type: 'BISECT_LEFT' });
             }}
             css={css({ flex: 1 })}
           >
@@ -129,7 +133,7 @@ export const BinarySearchModal = (props: {
           <Button
             variant="outlined"
             onClick={() => {
-              setLeftFrameNumber(midFrameNumber);
+              dispatchBinarySearch({ type: 'BISECT_RIGHT' });
             }}
             css={css({ flex: 1 })}
           >
