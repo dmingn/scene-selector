@@ -140,6 +140,23 @@ export const BinarySearchModal = (props: {
             R
           </Button>
         </div>
+        <div
+          css={css({
+            display: 'flex',
+            width: '60%',
+          })}
+        >
+          <Button
+            variant="outlined"
+            onClick={() => {
+              dispatchBinarySearch({ type: 'UNDO' });
+            }}
+            disabled={!binarySearchState.undoable}
+            css={css({ flex: 1 })}
+          >
+            Undo
+          </Button>
+        </div>
       </div>
     </Dialog>
   );
