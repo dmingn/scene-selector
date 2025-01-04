@@ -1,9 +1,14 @@
 import { css } from '@emotion/react';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { Button, CircularProgress, Tooltip } from '@mui/material';
-import { useContext, useEffect, useState } from 'react';
+import { useContext } from 'react';
 import { createRoot } from 'react-dom/client';
 import { CommandExample } from './components/CommandExample';
+import {
+  FrameNumbersContext,
+  FrameNumbersContextsProvider,
+  FrameNumbersDispatchContext,
+} from './components/context-providers/FrameNumbersContextsProvider';
 import { TrpcContextsProvider } from './components/context-providers/TrpcContextsProvider';
 import {
   VideoInfoContext,
@@ -12,36 +17,20 @@ import {
 } from './components/context-providers/VideoInfoContextsProvider';
 import { FileInput } from './components/FileInput';
 import { StartEndSelector } from './components/StartEndSelector';
-import { clamp } from './utils/clamp';
 
 const Content = () => {
   const videoInfo = useContext(VideoInfoContext);
   const setFilePath = useContext(VideoInfoSetFilePathContext);
 
-  const [startFrameNumber, _setStartFrameNumber] = useState<number>(0);
-  const [endFrameNumber, _setEndFrameNumber] = useState<number>(0);
+  const frameNumbers = useContext(FrameNumbersContext);
+  const dispatchFrameNumbers = useContext(FrameNumbersDispatchContext);
 
-  const setStartFrameNumber = (newValue: number) => {
-    _setStartFrameNumber(clamp(newValue, 0, endFrameNumber));
+  const resetFrameNumbers = () => {
+    dispatchFrameNumbers({
+      type: 'RESET',
+      frameCount: videoInfo.frameCount ?? 0,
+    });
   };
-  const setEndFrameNumber = (newValue: number) => {
-    _setEndFrameNumber(
-      clamp(
-        newValue,
-        startFrameNumber,
-        videoInfo.frameCount ? videoInfo.frameCount - 1 : 0,
-      ),
-    );
-  };
-
-  const resetStartEnd = () => {
-    setStartFrameNumber(0);
-    setEndFrameNumber(videoInfo.frameCount ? videoInfo.frameCount - 1 : 0);
-  };
-
-  useEffect(() => {
-    resetStartEnd();
-  }, [videoInfo.frameCount]);
 
   return (
     <div
@@ -78,7 +67,7 @@ const Content = () => {
         />
         {videoInfo.state === 'FETCHED' && (
           <Tooltip title="Reset">
-            <Button variant="outlined" onClick={resetStartEnd}>
+            <Button variant="outlined" onClick={resetFrameNumbers}>
               <RestartAltIcon />
             </Button>
           </Tooltip>
@@ -86,20 +75,15 @@ const Content = () => {
       </div>
       {videoInfo.state !== 'IDLE' &&
         (videoInfo.state === 'FETCHED' ? (
-          <StartEndSelector
-            startFrameNumber={startFrameNumber}
-            setStartFrameNumber={setStartFrameNumber}
-            endFrameNumber={endFrameNumber}
-            setEndFrameNumber={setEndFrameNumber}
-          />
+          <StartEndSelector />
         ) : (
           <CircularProgress />
         ))}
       {videoInfo.state !== 'IDLE' &&
         (videoInfo.state === 'FETCHED' ? (
           <CommandExample
-            startFrameNumber={startFrameNumber}
-            endFrameNumber={endFrameNumber}
+            startFrameNumber={frameNumbers.start}
+            endFrameNumber={frameNumbers.end}
           />
         ) : (
           <></>
@@ -112,7 +96,9 @@ export const App = () => {
   return (
     <TrpcContextsProvider>
       <VideoInfoContextsProvider>
-        <Content />
+        <FrameNumbersContextsProvider>
+          <Content />
+        </FrameNumbersContextsProvider>
       </VideoInfoContextsProvider>
     </TrpcContextsProvider>
   );

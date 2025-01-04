@@ -3,19 +3,29 @@ import { Slider } from '@mui/material';
 import { useContext } from 'react';
 import { frameNumberToTimecode } from '../utils/frameNumberToTimecode';
 import { FrameView } from './FrameView';
+import {
+  FrameNumbersContext,
+  FrameNumbersDispatchContext,
+} from './context-providers/FrameNumbersContextsProvider';
 import { VideoInfoContext } from './context-providers/VideoInfoContextsProvider';
 
-export const StartEndSelector = (props: {
-  startFrameNumber: number;
-  setStartFrameNumber: (newValue: number) => void;
-  endFrameNumber: number;
-  setEndFrameNumber: (newValue: number) => void;
-}) => {
+export const StartEndSelector = () => {
   const { frameCount, fps } = useContext(VideoInfoContext);
 
+  const frameNumbers = useContext(FrameNumbersContext);
+  const dispatchFrameNumbers = useContext(FrameNumbersDispatchContext);
+
+  const setStart = (start: number) => {
+    dispatchFrameNumbers({ type: 'SET_START', start });
+  };
+  const setEnd = (end: number) => {
+    dispatchFrameNumbers({ type: 'SET_END', end });
+  };
+
   const handleRangeChange = (event: Event, newValue: number[]) => {
-    props.setStartFrameNumber(newValue[0]);
-    props.setEndFrameNumber(newValue[1]);
+    const [start, end] = newValue;
+    setStart(start);
+    setEnd(end);
   };
 
   return (
@@ -28,23 +38,23 @@ export const StartEndSelector = (props: {
         })}
       >
         <FrameView
-          frameNumber={props.startFrameNumber}
-          setFrameNumber={props.setStartFrameNumber}
+          frameNumber={frameNumbers.start}
+          setFrameNumber={setStart}
           frameNumberMin={0}
-          frameNumberMax={props.endFrameNumber}
+          frameNumberMax={frameNumbers.end}
           css={css({ flex: 1 })}
         />
         <FrameView
-          frameNumber={props.endFrameNumber}
-          setFrameNumber={props.setEndFrameNumber}
-          frameNumberMin={props.startFrameNumber}
+          frameNumber={frameNumbers.end}
+          setFrameNumber={setEnd}
+          frameNumberMin={frameNumbers.start}
           frameNumberMax={frameCount - 1}
           css={css({ flex: 1 })}
         />
       </div>
       <div css={css({ padding: '0px 16px' })}>
         <Slider
-          value={[props.startFrameNumber, props.endFrameNumber]}
+          value={[frameNumbers.start, frameNumbers.end]}
           onChange={handleRangeChange}
           valueLabelDisplay="auto"
           valueLabelFormat={(value) => frameNumberToTimecode(value, fps)}
