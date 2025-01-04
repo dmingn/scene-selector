@@ -27,7 +27,7 @@ export const binarySearchReducer = (
   let { left, right, undoStack } = state;
 
   switch (action.type) {
-    case 'UNDO':
+    case 'UNDO': {
       if (state.undoStack.length === 0) {
         return state;
       }
@@ -39,6 +39,7 @@ export const binarySearchReducer = (
       undoStack = state.undoStack.slice(0, -1);
 
       break;
+    }
     case 'RESET':
       left = action.left;
       right = action.right;
