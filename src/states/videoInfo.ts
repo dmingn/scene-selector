@@ -52,18 +52,16 @@ export const videoInfoReducer = (
         frameCount: undefined,
       };
     case 'SET_INFO':
-      switch (state.state) {
-        case 'IDLE':
-          throw new Error('Unexpected action');
-        case 'FETCHING':
-        case 'FETCHED':
-          return {
-            state: 'FETCHED',
-            filePath: state.filePath,
-            fps: action.fps,
-            frameCount: action.frameCount,
-          };
+      if (state.state === 'IDLE') {
+        throw new Error('Unexpected action');
       }
+
+      return {
+        state: 'FETCHED',
+        filePath: state.filePath,
+        fps: action.fps,
+        frameCount: action.frameCount,
+      };
     default:
       throw new Error('Unhandled action type');
   }
