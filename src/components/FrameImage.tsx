@@ -1,7 +1,7 @@
 import { css, SerializedStyles } from '@emotion/react';
 import { CircularProgress } from '@mui/material';
 import { useContext } from 'react';
-import { getFrameImageBase64InputSchema } from '../api-schema';
+import { getFrameImageBase64InputSchema } from '../apiSchema';
 import { VideoContext } from '../contexts/VideoContext';
 import { trpc } from '../trpc';
 

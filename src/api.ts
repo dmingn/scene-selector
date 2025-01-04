@@ -2,7 +2,7 @@ import { initTRPC } from '@trpc/server';
 import {
   getFrameImageBase64InputSchema,
   getVideoInfoInputSchema,
-} from './api-schema';
+} from './apiSchema';
 import { getFrameImageBase64, getVideoInfo } from './utils/execFFmpeg';
 
 const t = initTRPC.create({ isServer: true });

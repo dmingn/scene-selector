@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ipcLink } from 'electron-trpc/renderer';
 import { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { getVideoInfoInputSchema } from './api-schema';
+import { getVideoInfoInputSchema } from './apiSchema';
 import { CommandExample } from './components/CommandExample';
 import { FileInput } from './components/FileInput';
 import { StartEndSelector } from './components/StartEndSelector';
