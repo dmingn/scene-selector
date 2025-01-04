@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { FormControlLabel, Switch, TextField, Tooltip } from '@mui/material';
 import { useContext, useState } from 'react';
-import { VideoContext } from '../contexts/VideoContext';
+import { VideoInfoContext } from '../states/videoInfo';
 import { convertWinPathToWSL } from '../utils/convertWinPathToWSL';
 import { frameNumberToTimecode } from '../utils/frameNumberToTimecode';
 import { getOutPath } from '../utils/getOutPath';
@@ -10,7 +10,7 @@ export const CommandExample = (props: {
   startFrameNumber: number;
   endFrameNumber: number;
 }) => {
-  const { filePath, fps } = useContext(VideoContext);
+  const { filePath, fps } = useContext(VideoInfoContext);
   const [copyCodec, setCopyCodec] = useState(false);
   const [wsl, setWsl] = useState(false);
 

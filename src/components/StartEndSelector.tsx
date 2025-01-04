@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { Slider } from '@mui/material';
 import { useContext } from 'react';
-import { VideoContext } from '../contexts/VideoContext';
+import { VideoInfoContext } from '../states/videoInfo';
 import { frameNumberToTimecode } from '../utils/frameNumberToTimecode';
 import { FrameView } from './FrameView';
 
@@ -11,7 +11,7 @@ export const StartEndSelector = (props: {
   endFrameNumber: number;
   setEndFrameNumber: (newValue: number) => void;
 }) => {
-  const { frameCount, fps } = useContext(VideoContext);
+  const { frameCount, fps } = useContext(VideoInfoContext);
 
   const handleRangeChange = (event: Event, newValue: number[]) => {
     props.setStartFrameNumber(newValue[0]);

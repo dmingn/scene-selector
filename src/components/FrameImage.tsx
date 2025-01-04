@@ -2,7 +2,7 @@ import { css, SerializedStyles } from '@emotion/react';
 import { CircularProgress } from '@mui/material';
 import { useContext } from 'react';
 import { getFrameImageBase64InputSchema } from '../apiSchema';
-import { VideoContext } from '../contexts/VideoContext';
+import { VideoInfoContext } from '../states/videoInfo';
 import { trpc } from '../trpc';
 
 export const FrameImage = (props: {
@@ -10,7 +10,7 @@ export const FrameImage = (props: {
   className?: string;
   css?: SerializedStyles;
 }) => {
-  const { filePath, fps } = useContext(VideoContext);
+  const { filePath, fps } = useContext(VideoInfoContext);
 
   const getFrameImageBase64Input = {
     videoPath: filePath,

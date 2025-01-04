@@ -1,7 +1,7 @@
 import { css, SerializedStyles } from '@emotion/react';
 import { Button, Dialog } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
-import { VideoContext } from '../contexts/VideoContext';
+import { VideoInfoContext } from '../states/videoInfo';
 import { frameNumberToTimecode } from '../utils/frameNumberToTimecode';
 import { FrameImage } from './FrameImage';
 
@@ -46,7 +46,7 @@ export const BinarySearchModal = (props: {
   leftFrameNumber: number;
   rightFrameNumber: number;
 }) => {
-  const { fps } = useContext(VideoContext);
+  const { fps } = useContext(VideoInfoContext);
 
   const [leftFrameNumber, setLeftFrameNumber] = useState<number>(0);
   const [midFrameNumber, setMidFrameNumber] = useState<number>(0);
