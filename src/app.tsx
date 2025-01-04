@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ipcLink } from 'electron-trpc/renderer';
 import { useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
+import { getVideoInfoInputSchema } from './api-schema';
 import { CommandExample } from './components/CommandExample';
 import { FileInput } from './components/FileInput';
 import { StartEndSelector } from './components/StartEndSelector';
@@ -14,10 +15,11 @@ import { clamp } from './utils/clamp';
 
 const Content = () => {
   const [filePath, setFilePath] = useState<string | null>(null);
-  const { data: videoInfo } = trpc.getVideoInfo.useQuery(
-    { videoPath: filePath },
-    { enabled: !!filePath },
-  );
+
+  const getVideoInfoInput = { videoPath: filePath };
+  const { data: videoInfo } = trpc.getVideoInfo.useQuery(getVideoInfoInput, {
+    enabled: getVideoInfoInputSchema.safeParse(getVideoInfoInput).success,
+  });
 
   const [frameCount, setFrameCount] = useState<number>(0);
   const [fps, setFps] = useState<number>(0);

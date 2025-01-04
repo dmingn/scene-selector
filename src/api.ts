@@ -1,5 +1,8 @@
 import { initTRPC } from '@trpc/server';
-import { z } from 'zod';
+import {
+  getFrameImageBase64InputSchema,
+  getVideoInfoInputSchema,
+} from './api-schema';
 import { getFrameImageBase64, getVideoInfo } from './utils/execFFmpeg';
 
 const t = initTRPC.create({ isServer: true });
@@ -7,18 +10,12 @@ const procedure = t.procedure;
 
 export const router = t.router({
   getVideoInfo: procedure
-    .input(z.object({ videoPath: z.string() }))
+    .input(getVideoInfoInputSchema)
     .query(async ({ input: { videoPath } }) => {
       return await getVideoInfo(videoPath);
     }),
   getFrameImageBase64: procedure
-    .input(
-      z.object({
-        videoPath: z.string(),
-        fps: z.number().positive(),
-        frameNumber: z.number().int().nonnegative(),
-      }),
-    )
+    .input(getFrameImageBase64InputSchema)
     .query(async ({ input: { videoPath, fps, frameNumber } }) => {
       return await getFrameImageBase64(videoPath, fps, frameNumber);
     }),
