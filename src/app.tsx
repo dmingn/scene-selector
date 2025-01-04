@@ -1,14 +1,13 @@
 import { css } from '@emotion/react';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { Button, CircularProgress, Tooltip } from '@mui/material';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ipcLink } from 'electron-trpc/renderer';
 import { useEffect, useReducer, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { getVideoInfoInputSchema } from './apiSchema';
 import { CommandExample } from './components/CommandExample';
 import { FileInput } from './components/FileInput';
 import { StartEndSelector } from './components/StartEndSelector';
+import { TrpcContextsProvider } from './components/TrpcContextsProvider';
 import {
   VideoInfoContext,
   videoInfoInitialState,
@@ -138,27 +137,10 @@ const Content = () => {
 };
 
 export const App = () => {
-  const [queryClient] = useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            staleTime: Infinity,
-            cacheTime: Infinity,
-          },
-        },
-      }),
-  );
-  const [trpcClient] = useState(() =>
-    trpc.createClient({ links: [ipcLink()] }),
-  );
-
   return (
-    <trpc.Provider client={trpcClient} queryClient={queryClient}>
-      <QueryClientProvider client={queryClient}>
-        <Content />
-      </QueryClientProvider>
-    </trpc.Provider>
+    <TrpcContextsProvider>
+      <Content />
+    </TrpcContextsProvider>
   );
 };
 
