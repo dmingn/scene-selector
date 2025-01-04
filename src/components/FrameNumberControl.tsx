@@ -1,7 +1,7 @@
 import { css } from '@emotion/react';
 import { Button, ButtonGroup } from '@mui/material';
 import { useContext } from 'react';
-import { VideoContext } from '../contexts/VideoContext';
+import { VideoInfoContext } from '../states/videoInfo';
 import { frameNumberToTimecode } from '../utils/frameNumberToTimecode';
 
 const AddSubButton = (props: {
@@ -59,7 +59,7 @@ export const FrameNumberControl = (props: {
   frameNumber: number;
   setFrameNumber: (frameNumber: number) => void;
 }) => {
-  const { fps } = useContext(VideoContext);
+  const { fps } = useContext(VideoInfoContext);
 
   return (
     <div css={css({ display: 'flex', flexDirection: 'column', gap: '4px' })}>

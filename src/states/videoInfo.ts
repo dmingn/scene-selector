@@ -1,3 +1,5 @@
+import { createContext } from 'react';
+
 export type VideoInfo =
   | {
       state: 'IDLE';
@@ -66,3 +68,5 @@ export const videoInfoReducer = (
       throw new Error('Unhandled action type');
   }
 };
+
+export const VideoInfoContext = createContext<VideoInfo>(videoInfoInitialState);

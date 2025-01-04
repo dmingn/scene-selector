@@ -9,8 +9,11 @@ import { getVideoInfoInputSchema } from './apiSchema';
 import { CommandExample } from './components/CommandExample';
 import { FileInput } from './components/FileInput';
 import { StartEndSelector } from './components/StartEndSelector';
-import { VideoContext } from './contexts/VideoContext';
-import { videoInfoInitialState, videoInfoReducer } from './states/videoInfo';
+import {
+  VideoInfoContext,
+  videoInfoInitialState,
+  videoInfoReducer,
+} from './states/videoInfo';
 import { trpc } from './trpc';
 import { clamp } from './utils/clamp';
 
@@ -62,13 +65,7 @@ const Content = () => {
   }, [videoInfo.frameCount]);
 
   return (
-    <VideoContext.Provider
-      value={{
-        filePath: videoInfo.filePath,
-        fps: videoInfo.fps,
-        frameCount: videoInfo.frameCount,
-      }}
-    >
+    <VideoInfoContext.Provider value={videoInfo}>
       <div
         onDragOver={(event) => {
           event.preventDefault();
@@ -136,7 +133,7 @@ const Content = () => {
             <></>
           ))}
       </div>
-    </VideoContext.Provider>
+    </VideoInfoContext.Provider>
   );
 };
 
