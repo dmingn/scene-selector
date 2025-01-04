@@ -1,9 +1,9 @@
 import { css, SerializedStyles } from '@emotion/react';
 import { Button, Dialog } from '@mui/material';
 import { useContext, useEffect, useState } from 'react';
-import { VideoInfoContext } from '../states/videoInfo';
 import { frameNumberToTimecode } from '../utils/frameNumberToTimecode';
 import { FrameImage } from './FrameImage';
+import { VideoInfoContext } from './context-providers/VideoInfoContextsProvider';
 
 const FrameImageAndSelectButton = (props: {
   fps: number;

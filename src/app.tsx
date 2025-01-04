@@ -1,43 +1,22 @@
 import { css } from '@emotion/react';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { Button, CircularProgress, Tooltip } from '@mui/material';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ipcLink } from 'electron-trpc/renderer';
-import { useEffect, useReducer, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { getVideoInfoInputSchema } from './apiSchema';
 import { CommandExample } from './components/CommandExample';
-import { FileInput } from './components/FileInput';
-import { StartEndSelector } from './components/StartEndSelector';
+import { TrpcContextsProvider } from './components/context-providers/TrpcContextsProvider';
 import {
   VideoInfoContext,
-  videoInfoInitialState,
-  videoInfoReducer,
-} from './states/videoInfo';
-import { trpc } from './trpc';
+  VideoInfoContextsProvider,
+  VideoInfoSetFilePathContext,
+} from './components/context-providers/VideoInfoContextsProvider';
+import { FileInput } from './components/FileInput';
+import { StartEndSelector } from './components/StartEndSelector';
 import { clamp } from './utils/clamp';
 
 const Content = () => {
-  const [videoInfo, dispatchVideoInfo] = useReducer(
-    videoInfoReducer,
-    videoInfoInitialState,
-  );
-
-  const getVideoInfoInput = { videoPath: videoInfo.filePath };
-  const { data: fetchedVideoInfo } = trpc.getVideoInfo.useQuery(
-    getVideoInfoInput,
-    { enabled: getVideoInfoInputSchema.safeParse(getVideoInfoInput).success },
-  );
-
-  useEffect(() => {
-    if (fetchedVideoInfo) {
-      dispatchVideoInfo({
-        type: 'SET_INFO',
-        fps: fetchedVideoInfo.fps,
-        frameCount: fetchedVideoInfo.frameCount,
-      });
-    }
-  }, [fetchedVideoInfo]);
+  const videoInfo = useContext(VideoInfoContext);
+  const setFilePath = useContext(VideoInfoSetFilePathContext);
 
   const [startFrameNumber, _setStartFrameNumber] = useState<number>(0);
   const [endFrameNumber, _setEndFrameNumber] = useState<number>(0);
@@ -65,100 +44,77 @@ const Content = () => {
   }, [videoInfo.frameCount]);
 
   return (
-    <VideoInfoContext.Provider value={videoInfo}>
-      <div
-        onDragOver={(event) => {
-          event.preventDefault();
-        }}
-        onDrop={(event) => {
-          event.preventDefault();
-          const file = event.dataTransfer.files?.[0];
+    <div
+      onDragOver={(event) => {
+        event.preventDefault();
+      }}
+      onDrop={(event) => {
+        event.preventDefault();
+        const file = event.dataTransfer.files?.[0];
 
-          if (file) {
-            dispatchVideoInfo({
-              type: 'SET_FILE_PATH',
-              filePath: window.webUtils.getPathForFile(file),
-            });
-          }
-        }}
-        css={css({
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: videoInfo.filePath ? 'space-between' : 'center',
-          gap: '16px',
-          height: '100%',
-        })}
-      >
-        <div css={css({ display: 'flex', gap: '8px' })}>
-          <FileInput
-            value={videoInfo.filePath}
-            onChange={(event) => {
-              const file = event.target.files?.[0];
+        if (file) {
+          setFilePath(window.webUtils.getPathForFile(file));
+        }
+      }}
+      css={css({
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: videoInfo.filePath ? 'space-between' : 'center',
+        gap: '16px',
+        height: '100%',
+      })}
+    >
+      <div css={css({ display: 'flex', gap: '8px' })}>
+        <FileInput
+          value={videoInfo.filePath}
+          onChange={(event) => {
+            const file = event.target.files?.[0];
 
-              if (file) {
-                dispatchVideoInfo({
-                  type: 'SET_FILE_PATH',
-                  filePath: window.webUtils.getPathForFile(file),
-                });
-              }
-            }}
-            css={css({ flex: 1 })}
-          />
-          {videoInfo.state === 'FETCHED' && (
-            <Tooltip title="Reset">
-              <Button variant="outlined" onClick={resetStartEnd}>
-                <RestartAltIcon />
-              </Button>
-            </Tooltip>
-          )}
-        </div>
-        {videoInfo.state !== 'IDLE' &&
-          (videoInfo.state === 'FETCHED' ? (
-            <StartEndSelector
-              startFrameNumber={startFrameNumber}
-              setStartFrameNumber={setStartFrameNumber}
-              endFrameNumber={endFrameNumber}
-              setEndFrameNumber={setEndFrameNumber}
-            />
-          ) : (
-            <CircularProgress />
-          ))}
-        {videoInfo.state !== 'IDLE' &&
-          (videoInfo.state === 'FETCHED' ? (
-            <CommandExample
-              startFrameNumber={startFrameNumber}
-              endFrameNumber={endFrameNumber}
-            />
-          ) : (
-            <></>
-          ))}
+            if (file) {
+              setFilePath(window.webUtils.getPathForFile(file));
+            }
+          }}
+          css={css({ flex: 1 })}
+        />
+        {videoInfo.state === 'FETCHED' && (
+          <Tooltip title="Reset">
+            <Button variant="outlined" onClick={resetStartEnd}>
+              <RestartAltIcon />
+            </Button>
+          </Tooltip>
+        )}
       </div>
-    </VideoInfoContext.Provider>
+      {videoInfo.state !== 'IDLE' &&
+        (videoInfo.state === 'FETCHED' ? (
+          <StartEndSelector
+            startFrameNumber={startFrameNumber}
+            setStartFrameNumber={setStartFrameNumber}
+            endFrameNumber={endFrameNumber}
+            setEndFrameNumber={setEndFrameNumber}
+          />
+        ) : (
+          <CircularProgress />
+        ))}
+      {videoInfo.state !== 'IDLE' &&
+        (videoInfo.state === 'FETCHED' ? (
+          <CommandExample
+            startFrameNumber={startFrameNumber}
+            endFrameNumber={endFrameNumber}
+          />
+        ) : (
+          <></>
+        ))}
+    </div>
   );
 };
 
 export const App = () => {
-  const [queryClient] = useState(
-    () =>
-      new QueryClient({
-        defaultOptions: {
-          queries: {
-            staleTime: Infinity,
-            cacheTime: Infinity,
-          },
-        },
-      }),
-  );
-  const [trpcClient] = useState(() =>
-    trpc.createClient({ links: [ipcLink()] }),
-  );
-
   return (
-    <trpc.Provider client={trpcClient} queryClient={queryClient}>
-      <QueryClientProvider client={queryClient}>
+    <TrpcContextsProvider>
+      <VideoInfoContextsProvider>
         <Content />
-      </QueryClientProvider>
-    </trpc.Provider>
+      </VideoInfoContextsProvider>
+    </TrpcContextsProvider>
   );
 };
 

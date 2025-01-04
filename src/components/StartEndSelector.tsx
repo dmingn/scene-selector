@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
 import { Slider } from '@mui/material';
 import { useContext } from 'react';
-import { VideoInfoContext } from '../states/videoInfo';
 import { frameNumberToTimecode } from '../utils/frameNumberToTimecode';
 import { FrameView } from './FrameView';
+import { VideoInfoContext } from './context-providers/VideoInfoContextsProvider';
 
 export const StartEndSelector = (props: {
   startFrameNumber: number;

@@ -1,8 +1,8 @@
 import { css } from '@emotion/react';
 import { Button, ButtonGroup } from '@mui/material';
 import { useContext } from 'react';
-import { VideoInfoContext } from '../states/videoInfo';
 import { frameNumberToTimecode } from '../utils/frameNumberToTimecode';
+import { VideoInfoContext } from './context-providers/VideoInfoContextsProvider';
 
 const AddSubButton = (props: {
   frameNumber: number;
