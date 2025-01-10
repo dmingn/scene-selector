@@ -1,0 +1,59 @@
+name: Bump version
+
+on:
+  workflow_dispatch:
+    inputs:
+      version_tag:
+        description: 'Semver formatted version tag (e.g., 1.0.0)'
+        required: true
+        type: string
+
+jobs:
+  bump-version:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.2.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4.1.0
+        with:
+          node-version: '22'
+
+      - name: Validate version format
+        run: |
+          echo "Input version: ${{ github.event.inputs.version_tag }}"
+          if [[ ! "${{ github.event.inputs.version_tag }}" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Error: The version tag is not in semver format."
+            exit 1
+          fi
+
+      - name: Bump version in package.json
+        run: |
+          jq ".version = \"${{ github.event.inputs.version_tag }}\"" package.json > package.tmp.json
+          mv package.tmp.json package.json
+
+      - name: Update package-lock.json
+        run: |
+          npm install
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b feature/bump-version-${{ github.event.inputs.version_tag }}
+          git add .
+          git commit -m "Bump version to ${{ github.event.inputs.version_tag }}"
+          git push origin feature/bump-version-${{ github.event.inputs.version_tag }}
+
+      - name: Create Pull Request
+        run: |
+          gh pr create \
+            --title "Bump version to ${{ github.event.inputs.version_tag }}" \
+            --body "This PR bumps the version to ${{ github.event.inputs.version_tag }}." \
+            --head "feature/bump-version-${{ github.event.inputs.version_tag }}" \
+            --base main
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
