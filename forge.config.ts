@@ -59,12 +59,14 @@ const config: ForgeConfig = {
     {
       name: '@electron-forge/publisher-github',
       config: {
+        draft: false,
+        force: false,
+        generateReleaseNotes: true,
+        prerelease: false,
         repository: {
           owner: 'dmingn',
           name: 'scene-selector',
         },
-        prerelease: false,
-        draft: true,
       },
     },
   ],
