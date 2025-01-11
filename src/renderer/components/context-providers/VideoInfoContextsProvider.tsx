@@ -1,5 +1,5 @@
 import { createContext, ReactNode, useEffect, useReducer } from 'react';
-import { getVideoInfoInputSchema } from '../../apiSchema';
+import { getVideoInfoInputSchema } from '../../../apiSchema';
 import {
   VideoInfo,
   videoInfoInitialState,

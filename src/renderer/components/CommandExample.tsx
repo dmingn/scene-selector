@@ -1,9 +1,9 @@
 import { css } from '@emotion/react';
 import { FormControlLabel, Switch, TextField, Tooltip } from '@mui/material';
 import { useContext, useState } from 'react';
-import { convertWinPathToWSL } from '../utils/convertWinPathToWSL';
-import { frameNumberToTimecode } from '../utils/frameNumberToTimecode';
-import { getOutPath } from '../utils/getOutPath';
+import { convertWinPathToWSL } from '../../utils/convertWinPathToWSL';
+import { frameNumberToTimecode } from '../../utils/frameNumberToTimecode';
+import { getOutPath } from '../../utils/getOutPath';
 import { VideoInfoContext } from './context-providers/VideoInfoContextsProvider';
 
 export const CommandExample = (props: {
