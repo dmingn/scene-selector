@@ -175,12 +175,24 @@ export const BinarySearchModal = (props: {
           padding: '16px',
         })}
       >
-        <BinarySearchControl
-          binarySearchState={binarySearchState}
-          dispatchBinarySearch={dispatchBinarySearch}
-          fps={fps}
-          onModalClose={props.onClose}
-        />
+        {binarySearchState.right - binarySearchState.left < 10 ? (
+          <FrameImageAndSelectButtons
+            fps={fps}
+            frameNumbers={[
+              ...Array(
+                binarySearchState.right - binarySearchState.left + 1,
+              ).keys(),
+            ].map((i) => i + binarySearchState.left)}
+            onSelect={props.onClose}
+          />
+        ) : (
+          <BinarySearchControl
+            binarySearchState={binarySearchState}
+            dispatchBinarySearch={dispatchBinarySearch}
+            fps={fps}
+            onModalClose={props.onClose}
+          />
+        )}
         <div
           css={css({
             display: 'flex',
