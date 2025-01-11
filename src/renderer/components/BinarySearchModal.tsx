@@ -1,11 +1,11 @@
 import { css, SerializedStyles } from '@emotion/react';
 import { Button, Dialog } from '@mui/material';
 import { useContext, useEffect, useReducer } from 'react';
+import { frameNumberToTimecode } from '../../utils/frameNumberToTimecode';
 import {
   binarySearchInitialState,
   binarySearchReducer,
 } from '../states/binarySearchState';
-import { frameNumberToTimecode } from '../utils/frameNumberToTimecode';
 import { FrameImage } from './FrameImage';
 import { VideoInfoContext } from './context-providers/VideoInfoContextsProvider';
 

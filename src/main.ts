@@ -2,7 +2,7 @@ import { app, BrowserWindow } from 'electron';
 import started from 'electron-squirrel-startup';
 import { createIPCHandler } from 'electron-trpc/main';
 import path from 'path';
-import { router } from './api';
+import { router } from './rpcServer/router';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (started) {
