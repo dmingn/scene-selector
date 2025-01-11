@@ -1,5 +1,5 @@
-avsynctest-vga-1m.mp4: Makefile
-	ffmpeg -f lavfi -i avsynctest=duration=60:size=vga[out0][out1] -y $@
+avsynctest-vga-1m.mp4: generateAvsynctest.ts
+	npx ts-node $< --duration 60 --size vga $@
 
-avsynctest-hd1080-10m.mp4: Makefile
-	ffmpeg -f lavfi -i avsynctest=duration=600:size=hd1080[out0][out1] -y $@
+avsynctest-hd1080-10m.mp4: generateAvsynctest.ts
+	npx ts-node $< --duration 600 --size hd1080 $@
