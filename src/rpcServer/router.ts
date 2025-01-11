@@ -2,8 +2,9 @@ import { initTRPC } from '@trpc/server';
 import {
   getFrameImageBase64InputSchema,
   getVideoInfoInputSchema,
-} from './apiSchema';
-import { getFrameImageBase64, getVideoInfo } from './utils/execFFmpeg';
+} from '../rpcSchema';
+import { getFrameImageBase64 } from './getFrameImageBase64';
+import { getVideoInfo } from './getVideoInfo';
 
 const t = initTRPC.create({ isServer: true });
 const procedure = t.procedure;

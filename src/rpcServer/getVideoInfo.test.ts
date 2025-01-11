@@ -1,5 +1,5 @@
 import { expect, test } from '@jest/globals';
-import { getVideoInfo } from './execFFmpeg';
+import { getVideoInfo } from './getVideoInfo';
 
 test('getVideoInfo works', async () => {
   const videoPath = 'videos/avsynctest-vga-1m.mp4';
