@@ -1,14 +1,20 @@
 import { execFile, ExecFileException } from 'child_process';
 import { app } from 'electron';
+import {
+  ffmpegPath as _ffmpegPath,
+  ffprobePath as _ffprobePath,
+} from 'ffmpeg-ffprobe-static';
 import * as fs from 'fs';
 import path from 'path';
 import { frameNumberToTimecode } from './frameNumberToTimecode';
 
-const resourcesPath =
-  process.env.NODE_ENV === 'production' ? process.resourcesPath : 'resources';
+const ffmpegDir =
+  process.env.NODE_ENV === 'production'
+    ? process.resourcesPath
+    : path.dirname(require.resolve('ffmpeg-ffprobe-static'));
 
-const ffmpegPath = resourcesPath + '/bin/ffmpeg';
-const ffprobePath = resourcesPath + '/bin/ffprobe';
+const ffmpegPath = path.join(ffmpegDir, path.basename(_ffmpegPath));
+const ffprobePath = path.join(ffmpegDir, path.basename(_ffprobePath));
 
 const parseFrameRate = (fraction: string): number | null => {
   const parts = fraction.split('/');
