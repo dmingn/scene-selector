@@ -3,8 +3,10 @@ import { Button, Dialog } from '@mui/material';
 import { useContext, useEffect, useReducer } from 'react';
 import { frameNumberToTimecode } from '../../utils/frameNumberToTimecode';
 import {
+  BinarySearchAction,
   binarySearchInitialState,
   binarySearchReducer,
+  BinarySearchState,
 } from '../states/binarySearchState';
 import { FrameImage } from './FrameImage';
 import { VideoInfoContext } from './context-providers/VideoInfoContextsProvider';
@@ -40,6 +42,94 @@ const FrameImageAndSelectButton = (props: {
       >
         Select
       </Button>
+    </div>
+  );
+};
+
+const FrameImageAndSelectButtons = (props: {
+  fps: number;
+  frameNumbers: number[];
+  onSelect: (value: number) => void;
+}) => {
+  return (
+    <div
+      css={css({
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'stretch',
+        gap: '8px',
+      })}
+    >
+      {props.frameNumbers.map((frameNumber, index) => (
+        <FrameImageAndSelectButton
+          key={index}
+          fps={props.fps}
+          frameNumber={frameNumber}
+          onSelect={props.onSelect}
+          css={css({ flex: 1 })}
+        />
+      ))}
+    </div>
+  );
+};
+
+const BinarySearchControl = (props: {
+  binarySearchState: BinarySearchState;
+  dispatchBinarySearch: (action: BinarySearchAction) => void;
+  fps: number;
+  onModalClose: (value: number | null) => void;
+}) => {
+  return (
+    <div
+      css={css({
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        gap: '8px',
+      })}
+    >
+      <FrameImageAndSelectButtons
+        fps={props.fps}
+        frameNumbers={[
+          props.binarySearchState.left,
+          props.binarySearchState.mid,
+          props.binarySearchState.right,
+        ]}
+        onSelect={props.onModalClose}
+      />
+      <div
+        css={css({
+          display: 'flex',
+          justifyContent: 'space-between',
+          gap: '8px',
+          width: '60%',
+        })}
+      >
+        <Button
+          variant="outlined"
+          onClick={() => {
+            props.dispatchBinarySearch({ type: 'BISECT_LEFT' });
+          }}
+          disabled={
+            props.binarySearchState.mid - props.binarySearchState.left <= 1
+          }
+          css={css({ flex: 1 })}
+        >
+          L
+        </Button>
+        <Button
+          variant="outlined"
+          onClick={() => {
+            props.dispatchBinarySearch({ type: 'BISECT_RIGHT' });
+          }}
+          disabled={
+            props.binarySearchState.right - props.binarySearchState.mid <= 1
+          }
+          css={css({ flex: 1 })}
+        >
+          R
+        </Button>
+      </div>
     </div>
   );
 };
@@ -85,61 +175,24 @@ export const BinarySearchModal = (props: {
           padding: '16px',
         })}
       >
-        <div
-          css={css({
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'stretch',
-            gap: '8px',
-          })}
-        >
-          <FrameImageAndSelectButton
+        {binarySearchState.right - binarySearchState.left < 10 ? (
+          <FrameImageAndSelectButtons
             fps={fps}
-            frameNumber={binarySearchState.left}
+            frameNumbers={[
+              ...Array(
+                binarySearchState.right - binarySearchState.left + 1,
+              ).keys(),
+            ].map((i) => i + binarySearchState.left)}
             onSelect={props.onClose}
-            css={css({ flex: 1 })}
           />
-          <FrameImageAndSelectButton
+        ) : (
+          <BinarySearchControl
+            binarySearchState={binarySearchState}
+            dispatchBinarySearch={dispatchBinarySearch}
             fps={fps}
-            frameNumber={binarySearchState.mid}
-            onSelect={props.onClose}
-            css={css({ flex: 1 })}
+            onModalClose={props.onClose}
           />
-
-          <FrameImageAndSelectButton
-            fps={fps}
-            frameNumber={binarySearchState.right}
-            onSelect={props.onClose}
-            css={css({ flex: 1 })}
-          />
-        </div>
-        <div
-          css={css({
-            display: 'flex',
-            justifyContent: 'space-between',
-            gap: '8px',
-            width: '60%',
-          })}
-        >
-          <Button
-            variant="outlined"
-            onClick={() => {
-              dispatchBinarySearch({ type: 'BISECT_LEFT' });
-            }}
-            css={css({ flex: 1 })}
-          >
-            L
-          </Button>
-          <Button
-            variant="outlined"
-            onClick={() => {
-              dispatchBinarySearch({ type: 'BISECT_RIGHT' });
-            }}
-            css={css({ flex: 1 })}
-          >
-            R
-          </Button>
-        </div>
+        )}
         <div
           css={css({
             display: 'flex',
