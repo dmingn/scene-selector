@@ -126,6 +126,7 @@ export const BinarySearchModal = (props: {
             onClick={() => {
               dispatchBinarySearch({ type: 'BISECT_LEFT' });
             }}
+            disabled={binarySearchState.mid - binarySearchState.left <= 1}
             css={css({ flex: 1 })}
           >
             L
@@ -135,6 +136,7 @@ export const BinarySearchModal = (props: {
             onClick={() => {
               dispatchBinarySearch({ type: 'BISECT_RIGHT' });
             }}
+            disabled={binarySearchState.right - binarySearchState.mid <= 1}
             css={css({ flex: 1 })}
           >
             R
