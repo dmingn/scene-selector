@@ -90,6 +90,3 @@ typings/
 
 # Electron-Forge
 out/
-
-# Video file for testing
-avsynctest*.mp4
