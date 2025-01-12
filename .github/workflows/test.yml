@@ -35,6 +35,9 @@ jobs:
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: npm ci
 
+      - name: Copy ffmpeg binaries to resources dir
+        run: make resources/bin
+
       - name: Cache video for testing
         id: cache-avsynctest-vga-1m
         uses: actions/cache@v4.2.0
