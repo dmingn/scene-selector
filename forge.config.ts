@@ -63,7 +63,7 @@ const config: ForgeConfig = {
         draft: false,
         force: false,
         generateReleaseNotes: true,
-        prerelease: false,
+        prerelease: true,
         repository: {
           owner: 'dmingn',
           name: 'scene-selector',
