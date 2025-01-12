@@ -51,7 +51,7 @@
     "name": "dmingn",
     "email": "dmingn@users.noreply.github.com"
   },
-  "license": "MIT",
+  "license": "GPL-3.0-or-later",
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
