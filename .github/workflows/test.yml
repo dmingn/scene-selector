@@ -26,7 +26,7 @@ jobs:
 
       - name: Cache node_modules
         id: cache-node-modules
-        uses: actions/cache@v4.2.0
+        uses: actions/cache@v4.2.1
         with:
           path: node_modules
           key: node-modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
@@ -40,7 +40,7 @@ jobs:
 
       - name: Cache video for testing
         id: cache-avsynctest-vga-1m
-        uses: actions/cache@v4.2.0
+        uses: actions/cache@v4.2.1
         with:
           path: videos/avsynctest-vga-1m.mp4
           key: avsynctest-vga-1m
