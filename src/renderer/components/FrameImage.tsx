@@ -17,7 +17,7 @@ export const FrameImage = (props: {
     fps: fps,
     frameNumber: props.frameNumber,
   };
-  const { data: image, isLoading: imageIsLoading } =
+  const { data: image, isPending: imageIsPending } =
     trpc.getFrameImageBase64.useQuery(getFrameImageBase64Input, {
       enabled: getFrameImageBase64InputSchema.safeParse(
         getFrameImageBase64Input,
@@ -36,7 +36,7 @@ export const FrameImage = (props: {
         props.css,
       ]}
     >
-      {imageIsLoading && <CircularProgress css={css({ width: '100%' })} />}
+      {imageIsPending && <CircularProgress css={css({ width: '100%' })} />}
       {image && (
         <img
           src={'data:image/png;base64,' + image}

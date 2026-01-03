@@ -9,7 +9,7 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts,.tsx ."
+    "lint": "eslint ."
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.6.0",
@@ -59,9 +59,9 @@
     "@mui/icons-material": "^6.4.0",
     "@mui/material": "^6.3.1",
     "@tanstack/react-query": "^5.90.16",
-    "@trpc/client": "^10.45.4",
-    "@trpc/react-query": "^10.45.4",
-    "@trpc/server": "^10.45.4",
+    "@trpc/client": "^11.0.0",
+    "@trpc/react-query": "^11.0.0",
+    "@trpc/server": "^11.0.0",
     "electron-squirrel-startup": "^1.0.1",
     "electron-trpc": "^0.7.1",
     "ffmpeg-ffprobe-static": "^6.1.2-rc.1",
