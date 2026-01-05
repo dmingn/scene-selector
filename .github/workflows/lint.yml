@@ -37,10 +37,10 @@ jobs:
         run: npm ci
 
       - name: Install reviewdog
-        uses: reviewdog/action-setup@3f401fe1d58fe77e10d665ab713057375e39b887 # v1.3.0
+        uses: reviewdog/action-setup@d8a7baabd7f3e8544ee4dbde3ee41d0011c3a93f # v1.5.0
 
       - name: Run eslint with reviewdog
-        uses: reviewdog/action-eslint@9b5b0150e399e1f007ee3c27bc156549810a64e3 # v1.33.0
+        uses: reviewdog/action-eslint@556a3fdaf8b4201d4d74d406013386aa4f7dab96 # v1.34.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           reporter: github-pr-review
