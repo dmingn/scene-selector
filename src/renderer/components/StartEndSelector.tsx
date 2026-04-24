@@ -29,7 +29,10 @@ export const StartEndSelector = () => {
   };
 
   return (
-    <div css={css({ display: 'flex', flexDirection: 'column', gap: '8px' })}>
+    <div
+      data-testid="e2e-start-end-selector"
+      css={css({ display: 'flex', flexDirection: 'column', gap: '8px' })}
+    >
       <div
         css={css({
           display: 'flex',

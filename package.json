@@ -7,9 +7,11 @@
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
+    "build:e2e": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint --ext .ts,.tsx ."
+    "lint": "eslint --ext .ts,.tsx .",
+    "test:e2e": "npm run build:e2e && playwright test"
   },
   "devDependencies": {
     "@electron-forge/cli": "^7.6.0",
@@ -25,6 +27,7 @@
     "@eslint/compat": "^1.2.4",
     "@eslint/eslintrc": "^3.2.0",
     "@eslint/js": "^9.17.0",
+    "@playwright/test": "^1.55.0",
     "@types/electron-squirrel-startup": "^1.0.2",
     "@types/jest": "^29.5.14",
     "@types/node": "^22.10.5",

@@ -16,6 +16,7 @@ export const FileInput = (props: {
   return (
     <div className={props.className} css={props.css}>
       <input
+        data-testid="e2e-video-file-input"
         type="file"
         onChange={props.onChange}
         ref={inputRef}
