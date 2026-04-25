@@ -61,9 +61,7 @@ export const videoInfoReducer = (
         frameCount: undefined,
       };
     case 'SET_INFO':
-      if (state.state === 'IDLE') {
-        throw new Error('Unexpected action');
-      }
+      if (state.state === 'IDLE') return state;
 
       return {
         state: 'FETCHED',
@@ -72,9 +70,7 @@ export const videoInfoReducer = (
         frameCount: action.frameCount,
       };
     case 'SET_ERROR':
-      if (state.state === 'IDLE') {
-        throw new Error('Unexpected action');
-      }
+      if (state.state === 'IDLE') return state;
 
       return {
         state: 'ERROR',
@@ -83,7 +79,10 @@ export const videoInfoReducer = (
         frameCount: undefined,
         errorMessage: action.errorMessage,
       };
-    default:
-      throw new Error('Unhandled action type');
+    default: {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const _exhaustive: never = action;
+      return state;
+    }
   }
 };
