@@ -4,10 +4,10 @@
 videos: videos/avsynctest-vga-1m.mp4 videos/avsynctest-hd1080-10m.mp4
 
 videos/avsynctest-vga-1m.mp4: scripts/generateAvsynctest.ts
-	npx ts-node $< --duration 60 --size vga $@
+	corepack pnpm exec ts-node $< --duration 60 --size vga $@
 
 videos/avsynctest-hd1080-10m.mp4: scripts/generateAvsynctest.ts
-	npx ts-node $< --duration 600 --size hd1080 $@
+	corepack pnpm exec ts-node $< --duration 600 --size hd1080 $@
 
 .PHONY: resources/bin
 resources/bin:
@@ -16,26 +16,26 @@ resources/bin:
 
 .PHONY: lint
 lint:
-	npx eslint .
+	corepack pnpm exec eslint .
 
 .PHONY: typecheck
 typecheck:
-	npx tsc --noEmit
+	corepack pnpm exec tsc --noEmit
 
 .PHONY: test-prereqs
 test-prereqs: resources/bin videos/avsynctest-vga-1m.mp4
 
 .PHONY: test
 test: test-prereqs
-	npx jest
+	corepack pnpm exec jest
 
 .PHONY: check
 check: lint typecheck test
 
 .PHONY: e2e-build
 e2e-build:
-	npx electron-forge package
+	corepack pnpm exec electron-forge package
 
 .PHONY: e2e
 e2e: test-prereqs e2e-build
-	npx playwright test
+	corepack pnpm exec playwright test
