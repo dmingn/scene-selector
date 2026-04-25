@@ -13,13 +13,15 @@ test.describe('Binary search modal', () => {
     await startView.getByTestId('e2e-frame-view-start-binary-search-open').click();
     await expect(page.getByTestId('e2e-binary-search-modal-body')).toBeVisible();
 
-    // Try a few bisections (buttons may become disabled depending on range).
+    // Try a few bisections deterministically.
     const left = page.getByTestId('e2e-bisect-left');
     const right = page.getByTestId('e2e-bisect-right');
     const undo = page.getByTestId('e2e-binary-search-undo');
 
-    if (await left.isEnabled()) await left.click();
-    if (await right.isEnabled()) await right.click();
+    await expect(left).toBeEnabled();
+    await left.click();
+    await expect(right).toBeEnabled();
+    await right.click();
     await expect(undo).toBeEnabled();
     await undo.click();
 
