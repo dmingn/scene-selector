@@ -14,6 +14,8 @@ export const VideoInfoSetFilePathContext =
 
 export const VideoInfoResetContext = createContext<() => void>(null);
 
+export const VideoInfoRefetchContext = createContext<() => void>(null);
+
 export const VideoInfoContextsProvider = (props: { children: ReactNode }) => {
   const [videoInfo, dispatchVideoInfo] = useReducer(
     videoInfoReducer,
@@ -25,6 +27,7 @@ export const VideoInfoContextsProvider = (props: { children: ReactNode }) => {
     data: fetchedVideoInfo,
     isError: getVideoInfoIsError,
     error: getVideoInfoError,
+    refetch: refetchVideoInfo,
   } = trpc.getVideoInfo.useQuery(getVideoInfoInput, {
     enabled: getVideoInfoInputSchema.safeParse(getVideoInfoInput).success,
   });
@@ -54,13 +57,19 @@ export const VideoInfoContextsProvider = (props: { children: ReactNode }) => {
           dispatchVideoInfo({ type: 'RESET' });
         }}
       >
-        <VideoInfoSetFilePathContext.Provider
-          value={(filePath: string) => {
-            dispatchVideoInfo({ type: 'SET_FILE_PATH', filePath });
+        <VideoInfoRefetchContext.Provider
+          value={() => {
+            refetchVideoInfo();
           }}
         >
-          {props.children}
-        </VideoInfoSetFilePathContext.Provider>
+          <VideoInfoSetFilePathContext.Provider
+            value={(filePath: string) => {
+              dispatchVideoInfo({ type: 'SET_FILE_PATH', filePath });
+            }}
+          >
+            {props.children}
+          </VideoInfoSetFilePathContext.Provider>
+        </VideoInfoRefetchContext.Provider>
       </VideoInfoResetContext.Provider>
     </VideoInfoContext.Provider>
   );

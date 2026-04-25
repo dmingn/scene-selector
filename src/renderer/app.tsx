@@ -13,6 +13,7 @@ import { TrpcContextsProvider } from './components/context-providers/TrpcContext
 import {
   VideoInfoContext,
   VideoInfoContextsProvider,
+  VideoInfoRefetchContext,
   VideoInfoResetContext,
   VideoInfoSetFilePathContext,
 } from './components/context-providers/VideoInfoContextsProvider';
@@ -23,6 +24,7 @@ const Content = () => {
   const videoInfo = useContext(VideoInfoContext);
   const setFilePath = useContext(VideoInfoSetFilePathContext);
   const resetVideoInfo = useContext(VideoInfoResetContext);
+  const refetchVideoInfo = useContext(VideoInfoRefetchContext);
 
   const frameNumbers = useContext(FrameNumbersContext);
   const dispatchFrameNumbers = useContext(FrameNumbersDispatchContext);
@@ -89,9 +91,7 @@ const Content = () => {
                   color="inherit"
                   size="small"
                   onClick={() => {
-                    if (videoInfo.filePath) {
-                      setFilePath(videoInfo.filePath);
-                    }
+                    refetchVideoInfo();
                   }}
                 >
                   Retry
