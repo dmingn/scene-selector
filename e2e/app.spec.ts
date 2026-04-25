@@ -7,7 +7,7 @@ import {
 } from '@playwright/test';
 
 test.describe('App E2E smoke test', () => {
-  let electronApp: ElectronApplication;
+  let electronApp: ElectronApplication | undefined;
   const repoRoot = path.resolve(__dirname, '..');
 
   test.beforeEach(async () => {
@@ -21,7 +21,7 @@ test.describe('App E2E smoke test', () => {
   });
 
   test.afterEach(async () => {
-    await electronApp.close();
+    await electronApp?.close();
   });
 
   test('app launches and loads video info', async () => {
