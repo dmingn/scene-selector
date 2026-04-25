@@ -14,7 +14,13 @@ const compat = new FlatCompat({
     allConfig: js.configs.all
 });
 
-export default [...fixupConfigRules(compat.extends(
+export default [{
+    ignores: [
+        ".vite/**",
+        "dist/**",
+        "out/**",
+    ],
+}, ...fixupConfigRules(compat.extends(
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended",
