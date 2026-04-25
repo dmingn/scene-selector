@@ -91,6 +91,9 @@ const Content = () => {
                   color="inherit"
                   size="small"
                   onClick={() => {
+                    if (videoInfo.filePath) {
+                      setFilePath(videoInfo.filePath);
+                    }
                     refetchVideoInfo();
                   }}
                 >
