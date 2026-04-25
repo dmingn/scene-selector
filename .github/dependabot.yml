@@ -6,9 +6,23 @@ updates:
       interval: "weekly"
     reviewers:
       - dmingn
+    groups:
+      dependency-updates:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
   - package-ecosystem: "npm"
     directory: "/"
     schedule:
       interval: "weekly"
     reviewers:
       - dmingn
+    groups:
+      dependency-updates:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
