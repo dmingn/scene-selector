@@ -17,7 +17,7 @@ export const FrameImage = (props: {
     fps: fps,
     frameNumber: props.frameNumber,
   };
-  const { data: image, isPending: imageIsPending } =
+  const { data: image, isLoading: imageIsPending } =
     trpc.getFrameImageBase64.useQuery(getFrameImageBase64Input, {
       enabled: getFrameImageBase64InputSchema.safeParse(
         getFrameImageBase64Input,
