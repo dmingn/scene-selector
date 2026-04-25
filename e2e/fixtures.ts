@@ -16,7 +16,9 @@ type AppFixtures = {
 };
 
 export const test = base.extend<AppFixtures>({
-  repoRoot: async (_args, use) => {
+  // Playwright fixture functions require object destructuring as the first parameter.
+  // eslint-disable-next-line no-empty-pattern
+  repoRoot: async ({}, use) => {
     await use(path.resolve(__dirname, '..'));
   },
 
