@@ -1,5 +1,5 @@
 import { css, SerializedStyles } from '@emotion/react';
-import { CircularProgress } from '@mui/material';
+import { Button, CircularProgress } from '@mui/material';
 import { useContext } from 'react';
 import { getFrameImageBase64InputSchema } from '../../rpcSchema';
 import { trpc } from '../trpc';
@@ -17,7 +17,12 @@ export const FrameImage = (props: {
     fps: fps,
     frameNumber: props.frameNumber,
   };
-  const { data: image, isLoading: imageIsPending } =
+  const {
+    data: image,
+    isLoading: imageIsPending,
+    isError: imageIsError,
+    refetch: refetchImage,
+  } =
     trpc.getFrameImageBase64.useQuery(getFrameImageBase64Input, {
       enabled: getFrameImageBase64InputSchema.safeParse(
         getFrameImageBase64Input,
@@ -26,6 +31,16 @@ export const FrameImage = (props: {
 
   return (
     <div
+      data-testid="e2e-frame-image"
+      data-state={
+        imageIsPending
+          ? 'loading'
+          : imageIsError
+            ? 'error'
+            : image
+              ? 'ready'
+              : 'idle'
+      }
       className={props.className}
       css={[
         css({
@@ -36,9 +51,37 @@ export const FrameImage = (props: {
         props.css,
       ]}
     >
-      {imageIsPending && <CircularProgress css={css({ width: '100%' })} />}
+      {imageIsPending && (
+        <CircularProgress
+          data-testid="e2e-frame-image-loading"
+          css={css({ width: '100%' })}
+        />
+      )}
+      {imageIsError && (
+        <div
+          data-testid="e2e-frame-image-error"
+          css={css({
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '8px',
+          })}
+        >
+          <div>Failed to load frame image.</div>
+          <Button
+            data-testid="e2e-frame-image-retry"
+            variant="outlined"
+            onClick={() => {
+              refetchImage();
+            }}
+          >
+            Retry
+          </Button>
+        </div>
+      )}
       {image && (
         <img
+          data-testid="e2e-frame-image-img"
           src={'data:image/png;base64,' + image}
           css={css({ width: '100%', height: 'auto' })}
         />

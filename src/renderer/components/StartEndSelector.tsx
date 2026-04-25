@@ -41,6 +41,7 @@ export const StartEndSelector = () => {
         })}
       >
         <FrameView
+          testId="e2e-frame-view-start"
           frameNumber={frameNumbers.start}
           setFrameNumber={setStart}
           frameNumberMin={0}
@@ -48,6 +49,7 @@ export const StartEndSelector = () => {
           css={css({ flex: 1 })}
         />
         <FrameView
+          testId="e2e-frame-view-end"
           frameNumber={frameNumbers.end}
           setFrameNumber={setEnd}
           frameNumberMin={frameNumbers.start}
@@ -57,6 +59,7 @@ export const StartEndSelector = () => {
       </div>
       <div css={css({ padding: '0px 16px' })}>
         <Slider
+          data-testid="e2e-range-slider"
           value={[frameNumbers.start, frameNumbers.end]}
           onChange={handleRangeChange}
           valueLabelDisplay="auto"

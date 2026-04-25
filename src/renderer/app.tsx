@@ -1,6 +1,6 @@
 import { css } from '@emotion/react';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
-import { Button, CircularProgress, Tooltip } from '@mui/material';
+import { Alert, Button, CircularProgress, Tooltip } from '@mui/material';
 import { useContext } from 'react';
 import { createRoot } from 'react-dom/client';
 import { CommandExample } from './components/CommandExample';
@@ -13,6 +13,8 @@ import { TrpcContextsProvider } from './components/context-providers/TrpcContext
 import {
   VideoInfoContext,
   VideoInfoContextsProvider,
+  VideoInfoRefetchContext,
+  VideoInfoResetContext,
   VideoInfoSetFilePathContext,
 } from './components/context-providers/VideoInfoContextsProvider';
 import { FileInput } from './components/FileInput';
@@ -21,6 +23,8 @@ import { StartEndSelector } from './components/StartEndSelector';
 const Content = () => {
   const videoInfo = useContext(VideoInfoContext);
   const setFilePath = useContext(VideoInfoSetFilePathContext);
+  const resetVideoInfo = useContext(VideoInfoResetContext);
+  const refetchVideoInfo = useContext(VideoInfoRefetchContext);
 
   const frameNumbers = useContext(FrameNumbersContext);
   const dispatchFrameNumbers = useContext(FrameNumbersDispatchContext);
@@ -76,6 +80,40 @@ const Content = () => {
       {videoInfo.state !== 'IDLE' &&
         (videoInfo.state === 'FETCHED' ? (
           <StartEndSelector />
+        ) : videoInfo.state === 'ERROR' ? (
+          <Alert
+            data-testid="e2e-video-info-error"
+            severity="error"
+            action={
+              <div css={css({ display: 'flex', gap: '8px' })}>
+                <Button
+                  data-testid="e2e-video-info-retry"
+                  color="inherit"
+                  size="small"
+                  onClick={() => {
+                    if (videoInfo.filePath) {
+                      setFilePath(videoInfo.filePath);
+                    }
+                    refetchVideoInfo();
+                  }}
+                >
+                  Retry
+                </Button>
+                <Button
+                  data-testid="e2e-video-info-reset"
+                  color="inherit"
+                  size="small"
+                  onClick={() => {
+                    resetVideoInfo();
+                  }}
+                >
+                  Reset
+                </Button>
+              </div>
+            }
+          >
+            {videoInfo.errorMessage}
+          </Alert>
         ) : (
           <CircularProgress data-testid="e2e-loading-indicator" />
         ))}

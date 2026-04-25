@@ -15,6 +15,7 @@ const FrameImageAndSelectButton = (props: {
   fps: number;
   frameNumber: number;
   onSelect: (value: number) => void;
+  testId?: string;
   className?: string;
   css?: SerializedStyles;
 }) => {
@@ -35,6 +36,7 @@ const FrameImageAndSelectButton = (props: {
       <div>{props.frameNumber}</div>
       <div>{frameNumberToTimecode(props.frameNumber, props.fps)}</div>
       <Button
+        data-testid={props.testId}
         variant="outlined"
         onClick={() => {
           props.onSelect(props.frameNumber);
@@ -50,6 +52,7 @@ const FrameImageAndSelectButtons = (props: {
   fps: number;
   frameNumbers: number[];
   onSelect: (value: number) => void;
+  testIdPrefix?: string;
 }) => {
   return (
     <div
@@ -66,6 +69,9 @@ const FrameImageAndSelectButtons = (props: {
           fps={props.fps}
           frameNumber={frameNumber}
           onSelect={props.onSelect}
+          testId={
+            props.testIdPrefix ? `${props.testIdPrefix}-select-${index}` : undefined
+          }
           css={css({ flex: 1 })}
         />
       ))}
@@ -96,6 +102,7 @@ const BinarySearchControl = (props: {
           props.binarySearchState.right,
         ]}
         onSelect={props.onModalClose}
+        testIdPrefix="e2e-binary-search"
       />
       <div
         css={css({
@@ -106,6 +113,7 @@ const BinarySearchControl = (props: {
         })}
       >
         <Button
+          data-testid="e2e-bisect-left"
           variant="outlined"
           onClick={() => {
             props.dispatchBinarySearch({ type: 'BISECT_LEFT' });
@@ -118,6 +126,7 @@ const BinarySearchControl = (props: {
           L
         </Button>
         <Button
+          data-testid="e2e-bisect-right"
           variant="outlined"
           onClick={() => {
             props.dispatchBinarySearch({ type: 'BISECT_RIGHT' });
@@ -159,6 +168,7 @@ export const BinarySearchModal = (props: {
 
   return (
     <Dialog
+      data-testid="e2e-binary-search-modal"
       open={props.open}
       onClose={() => {
         props.onClose(null);
@@ -167,6 +177,7 @@ export const BinarySearchModal = (props: {
       maxWidth="xl"
     >
       <div
+        data-testid="e2e-binary-search-modal-body"
         css={css({
           display: 'flex',
           flexDirection: 'column',
@@ -184,6 +195,7 @@ export const BinarySearchModal = (props: {
               ).keys(),
             ].map((i) => i + binarySearchState.left)}
             onSelect={props.onClose}
+            testIdPrefix="e2e-binary-search"
           />
         ) : (
           <BinarySearchControl
@@ -200,6 +212,7 @@ export const BinarySearchModal = (props: {
           })}
         >
           <Button
+            data-testid="e2e-binary-search-undo"
             variant="outlined"
             onClick={() => {
               dispatchBinarySearch({ type: 'UNDO' });
