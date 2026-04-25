@@ -1,20 +1,31 @@
 import path from 'path';
-import { test, expect } from '@playwright/test';
-import { _electron as electron } from 'playwright';
+import {
+  test,
+  expect,
+  _electron as electron,
+  type ElectronApplication,
+} from '@playwright/test';
 
-test('app launches and loads video info', async () => {
+test.describe('App E2E smoke test', () => {
+  let electronApp: ElectronApplication;
   const repoRoot = path.resolve(__dirname, '..');
-  const videoPath = path.join(repoRoot, 'videos', 'avsynctest-vga-1m.mp4');
 
-  const electronApp = await electron.launch({
-    args: [path.join(repoRoot, '.vite', 'build', 'main.js')],
-    env: {
-      ...process.env,
-      NODE_ENV: 'test',
-    },
+  test.beforeEach(async () => {
+    electronApp = await electron.launch({
+      args: [path.join(repoRoot, '.vite', 'build', 'main.js')],
+      env: {
+        ...process.env,
+        NODE_ENV: 'test',
+      },
+    });
   });
 
-  try {
+  test.afterEach(async () => {
+    await electronApp.close();
+  });
+
+  test('app launches and loads video info', async () => {
+    const videoPath = path.join(repoRoot, 'videos', 'avsynctest-vga-1m.mp4');
     const page = await electronApp.firstWindow();
 
     await expect(page.locator('#root')).toBeVisible();
@@ -30,8 +41,6 @@ test('app launches and loads video info', async () => {
 
     await expect(page.getByTestId('e2e-start-end-selector')).toBeVisible();
     await expect(loading).toBeHidden();
-  } finally {
-    await electronApp.close();
-  }
+  });
 });
 
