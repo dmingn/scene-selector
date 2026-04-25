@@ -1,5 +1,6 @@
 import { css } from '@emotion/react';
 import { FormControlLabel, Switch, TextField, Tooltip } from '@mui/material';
+import type React from 'react';
 import { useContext, useState } from 'react';
 import { convertWinPathToWSL } from '../../utils/convertWinPathToWSL';
 import { frameNumberToTimecode } from '../../utils/frameNumberToTimecode';
@@ -36,8 +37,12 @@ export const CommandExample = (props: {
 
   const [copied, setCopied] = useState(false);
 
-  const switchInputProps = (testId: string) =>
-    ({ 'data-testid': testId }) as unknown;
+  type SwitchInputProps = React.InputHTMLAttributes<HTMLInputElement> & {
+    'data-testid': string;
+  };
+  const switchInputProps = (testId: string): SwitchInputProps => ({
+    'data-testid': testId,
+  });
 
   return (
     <div
