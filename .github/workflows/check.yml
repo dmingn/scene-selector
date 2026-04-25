@@ -1,4 +1,4 @@
-name: Lint
+name: Check
 
 on:
   pull_request:
@@ -11,11 +11,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  lint:
+  check:
     runs-on: ubuntu-latest
     permissions:
       contents: read
-      pull-requests: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4.2.2
@@ -36,17 +35,13 @@ jobs:
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: npm ci
 
-      - name: Install reviewdog
-        uses: reviewdog/action-setup@3f401fe1d58fe77e10d665ab713057375e39b887 # v1.3.0
-
-      - name: Run eslint with reviewdog
-        uses: reviewdog/action-eslint@9b5b0150e399e1f007ee3c27bc156549810a64e3 # v1.33.0
+      - name: Cache video for testing
+        id: cache-avsynctest-vga-1m
+        uses: actions/cache@v4.2.0
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          reporter: github-pr-review
-          eslint_flags: 'src/'
+          path: videos/avsynctest-vga-1m.mp4
+          key: avsynctest-vga-1m
 
-      - name: Run tsc with reviewdog
-        run: npx tsc --pretty false --noEmit | reviewdog -f=tsc -reporter=github-pr-review -fail-level=error
-        env:
-          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.github_token }}
+      - name: Run make check
+        run: make check
+
