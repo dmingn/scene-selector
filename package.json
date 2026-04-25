@@ -10,7 +10,6 @@
     "build:e2e": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
-    "lint": "eslint .",
     "test:e2e": "npm run build:e2e && playwright test"
   },
   "devDependencies": {

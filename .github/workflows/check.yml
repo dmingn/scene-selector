@@ -1,4 +1,4 @@
-name: Test
+name: Check
 
 on:
   pull_request:
@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  jest:
+  check:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -35,9 +35,6 @@ jobs:
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: npm ci
 
-      - name: Copy ffmpeg binaries to resources dir
-        run: make resources/bin
-
       - name: Cache video for testing
         id: cache-avsynctest-vga-1m
         uses: actions/cache@v4.2.0
@@ -45,12 +42,8 @@ jobs:
           path: videos/avsynctest-vga-1m.mp4
           key: avsynctest-vga-1m
 
-      - name: Generate video for testing
-        if: steps.cache-avsynctest-vga-1m.outputs.cache-hit != 'true'
-        run: make videos/avsynctest-vga-1m.mp4
-
-      - name: Run jest
-        run: npx jest
+      - name: Run make check
+        run: make check
 
   e2e:
     runs-on: ubuntu-latest
@@ -76,9 +69,6 @@ jobs:
         if: steps.cache-node-modules.outputs.cache-hit != 'true'
         run: npm ci
 
-      - name: Copy ffmpeg binaries to resources dir
-        run: make resources/bin
-
       - name: Cache video for testing
         id: cache-avsynctest-vga-1m
         uses: actions/cache@v4.2.0
@@ -86,9 +76,8 @@ jobs:
           path: videos/avsynctest-vga-1m.mp4
           key: avsynctest-vga-1m
 
-      - name: Generate video for testing
-        if: steps.cache-avsynctest-vga-1m.outputs.cache-hit != 'true'
-        run: make videos/avsynctest-vga-1m.mp4
+      - name: Run make test prerequisites
+        run: make resources/bin videos/avsynctest-vga-1m.mp4
 
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
