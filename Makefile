@@ -22,9 +22,20 @@ lint:
 typecheck:
 	npx tsc --noEmit
 
+.PHONY: test-prereqs
+test-prereqs: resources/bin videos/avsynctest-vga-1m.mp4
+
 .PHONY: test
-test: resources/bin videos/avsynctest-vga-1m.mp4
+test: test-prereqs
 	npx jest
 
 .PHONY: check
 check: lint typecheck test
+
+.PHONY: e2e-build
+e2e-build:
+	npx electron-forge package
+
+.PHONY: e2e
+e2e: test-prereqs e2e-build
+	npx playwright test

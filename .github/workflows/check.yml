@@ -76,11 +76,5 @@ jobs:
           path: videos/avsynctest-vga-1m.mp4
           key: avsynctest-vga-1m
 
-      - name: Run make test prerequisites
-        run: make resources/bin videos/avsynctest-vga-1m.mp4
-
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps
-
       - name: Run e2e
-        run: xvfb-run -a npm run test:e2e
+        run: xvfb-run -a make e2e
