@@ -45,3 +45,36 @@ jobs:
       - name: Run make check
         run: make check
 
+  e2e:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.2.2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4.1.0
+        with:
+          node-version-file: '.node-version'
+
+      - name: Cache node_modules
+        id: cache-node-modules
+        uses: actions/cache@v4.2.0
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install dependencies
+        if: steps.cache-node-modules.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Cache video for testing
+        id: cache-avsynctest-vga-1m
+        uses: actions/cache@v4.2.0
+        with:
+          path: videos/avsynctest-vga-1m.mp4
+          key: avsynctest-vga-1m
+
+      - name: Run e2e
+        run: xvfb-run -a make e2e

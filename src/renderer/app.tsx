@@ -77,7 +77,7 @@ const Content = () => {
         (videoInfo.state === 'FETCHED' ? (
           <StartEndSelector />
         ) : (
-          <CircularProgress />
+          <CircularProgress data-testid="e2e-loading-indicator" />
         ))}
       {videoInfo.state !== 'IDLE' &&
         (videoInfo.state === 'FETCHED' ? (

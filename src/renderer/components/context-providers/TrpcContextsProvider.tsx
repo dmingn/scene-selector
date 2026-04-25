@@ -10,7 +10,7 @@ export const TrpcContextsProvider = (props: { children: ReactNode }) => {
         defaultOptions: {
           queries: {
             staleTime: Infinity,
-            gcTime: Infinity,
+            cacheTime: Infinity,
           },
         },
       }),
