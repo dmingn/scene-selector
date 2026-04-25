@@ -10,6 +10,7 @@ export const FrameView = (props: {
   setFrameNumber: (frameNumber: number) => void;
   frameNumberMin: number;
   frameNumberMax: number;
+  testId?: string;
   className?: string;
   css?: SerializedStyles;
 }) => {
@@ -17,6 +18,7 @@ export const FrameView = (props: {
 
   return (
     <div
+      data-testid={props.testId}
       className={props.className}
       css={[
         css({
@@ -33,6 +35,9 @@ export const FrameView = (props: {
         setFrameNumber={props.setFrameNumber}
       />
       <Button
+        data-testid={
+          props.testId ? `${props.testId}-binary-search-open` : undefined
+        }
         variant="outlined"
         onClick={() => {
           setOpenBinarySearchModal(true);

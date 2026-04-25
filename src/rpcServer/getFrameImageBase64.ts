@@ -55,6 +55,9 @@ export const getFrameImageBase64 = async (
   fps: number,
   frameNumber: number,
 ) => {
+  if (process.env.E2E_FORCE_FFMPEG_FAIL === '1') {
+    throw new Error('E2E forced ffmpeg failure');
+  }
   return getFrameImage(videoPath, fps, frameNumber).then((imagePath) => {
     return imageToBase64(imagePath);
   });

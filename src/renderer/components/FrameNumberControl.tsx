@@ -77,7 +77,7 @@ export const FrameNumberControl = (props: {
           fps={fps}
           type="frame"
         />
-        <div>{props.frameNumber}</div>
+        <div data-testid="e2e-frame-number">{props.frameNumber}</div>
         <AddSubButtonGroup
           frameNumber={props.frameNumber}
           setFrameNumber={props.setFrameNumber}
@@ -100,7 +100,9 @@ export const FrameNumberControl = (props: {
           fps={fps}
           type="second"
         />
-        <div>{frameNumberToTimecode(props.frameNumber, fps)}</div>
+        <div data-testid="e2e-frame-timecode">
+          {frameNumberToTimecode(props.frameNumber, fps)}
+        </div>
         <AddSubButtonGroup
           frameNumber={props.frameNumber}
           setFrameNumber={props.setFrameNumber}

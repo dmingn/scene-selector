@@ -36,8 +36,15 @@ export const CommandExample = (props: {
 
   const [copied, setCopied] = useState(false);
 
+  const switchInputProps = (testId: string) =>
+    ({ 'data-testid': testId }) as unknown;
+
   return (
-    <div css={{ display: 'flex', gap: '8px' }}>
+    <div
+      data-testid="e2e-command-example"
+      data-copied={copied ? 'true' : 'false'}
+      css={{ display: 'flex', gap: '8px' }}
+    >
       <Tooltip
         placement="top"
         title={copied ? 'Copied' : 'Click to copy'}
@@ -45,6 +52,7 @@ export const CommandExample = (props: {
         css={{ flex: 1 }}
       >
         <TextField
+          data-testid="e2e-ffmpeg-command"
           type="text"
           label="FFmpeg command example"
           value={command}
@@ -72,6 +80,7 @@ export const CommandExample = (props: {
         <FormControlLabel
           control={
             <Switch
+              inputProps={switchInputProps('e2e-copy-codec-switch')}
               checked={copyCodec}
               onChange={(event) => {
                 setCopyCodec(event.target.checked);
@@ -84,6 +93,7 @@ export const CommandExample = (props: {
           <FormControlLabel
             control={
               <Switch
+                inputProps={switchInputProps('e2e-wsl-switch')}
                 checked={wsl}
                 onChange={(event) => {
                   setWsl(event.target.checked);
