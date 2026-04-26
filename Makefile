@@ -3,6 +3,10 @@
 PNPM := pnpm
 PNPM_EXEC := $(PNPM) exec
 
+.PHONY: deps
+deps:
+	$(PNPM) install --frozen-lockfile
+
 .PHONY: videos
 videos: videos/avsynctest-vga-1m.mp4 videos/avsynctest-hd1080-10m.mp4
 
@@ -18,27 +22,27 @@ resources/bin:
 	cp node_modules/ffmpeg-ffprobe-static/ffprobe $@ || cp node_modules/ffmpeg-ffprobe-static/ffprobe.exe $@
 
 .PHONY: lint
-lint:
+lint: deps
 	$(PNPM_EXEC) eslint .
 
 .PHONY: typecheck
-typecheck:
+typecheck: deps
 	$(PNPM_EXEC) tsc --noEmit
 
 .PHONY: test-prereqs
-test-prereqs: resources/bin videos/avsynctest-vga-1m.mp4
+test-prereqs: deps resources/bin videos/avsynctest-vga-1m.mp4
 
 .PHONY: test
-test: test-prereqs
+test: deps test-prereqs
 	$(PNPM_EXEC) jest
 
 .PHONY: check
-check: lint typecheck test
+check: deps lint typecheck test
 
 .PHONY: e2e-build
-e2e-build:
+e2e-build: deps
 	$(PNPM_EXEC) electron-forge package
 
 .PHONY: e2e
-e2e: test-prereqs e2e-build
+e2e: deps test-prereqs e2e-build
 	$(PNPM_EXEC) playwright test
