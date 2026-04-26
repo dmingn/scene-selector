@@ -23,22 +23,21 @@ jobs:
         uses: actions/setup-node@v4.1.0
         with:
           node-version-file: '.node-version'
+          cache: 'pnpm'
+          cache-dependency-path: 'pnpm-lock.yaml'
 
-      - name: Cache pnpm store
-        uses: actions/cache@v4.2.0
-        with:
-          path: ~/.local/share/pnpm/store
-          key: pnpm-store-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v5
 
       - name: Install dependencies
         run: |
-          corepack enable
-          corepack pnpm install --frozen-lockfile
+          pnpm --version | grep -Fx '8.15.9'
+          pnpm install --frozen-lockfile
 
       - name: Copy ffmpeg binaries to resources dir
         run: make resources/bin
 
       - name: Publish
-        run: corepack pnpm run publish
+        run: pnpm run publish
         env:
           GITHUB_TOKEN: ${{ secrets.github_token }}

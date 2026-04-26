@@ -23,17 +23,16 @@ jobs:
         uses: actions/setup-node@v4.1.0
         with:
           node-version-file: '.node-version'
+          cache: 'pnpm'
+          cache-dependency-path: 'pnpm-lock.yaml'
 
-      - name: Cache pnpm store
-        uses: actions/cache@v4.2.0
-        with:
-          path: ~/.local/share/pnpm/store
-          key: pnpm-store-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v5
 
       - name: Install dependencies
         run: |
-          corepack enable
-          corepack pnpm install --frozen-lockfile
+          pnpm --version | grep -Fx '8.15.9'
+          pnpm install --frozen-lockfile
 
       - name: Cache video for testing
         id: cache-avsynctest-vga-1m
@@ -57,17 +56,16 @@ jobs:
         uses: actions/setup-node@v4.1.0
         with:
           node-version-file: '.node-version'
+          cache: 'pnpm'
+          cache-dependency-path: 'pnpm-lock.yaml'
 
-      - name: Cache pnpm store
-        uses: actions/cache@v4.2.0
-        with:
-          path: ~/.local/share/pnpm/store
-          key: pnpm-store-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v5
 
       - name: Install dependencies
         run: |
-          corepack enable
-          corepack pnpm install --frozen-lockfile
+          pnpm --version | grep -Fx '8.15.9'
+          pnpm install --frozen-lockfile
 
       - name: Cache video for testing
         id: cache-avsynctest-vga-1m

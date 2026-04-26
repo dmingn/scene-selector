@@ -29,18 +29,17 @@ jobs:
         uses: actions/setup-node@v4.1.0
         with:
           node-version-file: '.node-version'
+          cache: 'pnpm'
+          cache-dependency-path: 'pnpm-lock.yaml'
 
-      - name: Cache pnpm store
-        uses: actions/cache@v4.2.0
-        with:
-          path: ~/.local/share/pnpm/store
-          key: pnpm-store-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v5
 
       - name: Bump version
         id: bump_version
         run: |
-          corepack enable
-          echo "newversion=$(corepack pnpm version --no-git-tag-version ${{ github.event.inputs.bump_type }})" >> $GITHUB_OUTPUT
+          pnpm --version | grep -Fx '8.15.9'
+          echo "newversion=$(pnpm version --no-git-tag-version ${{ github.event.inputs.bump_type }})" >> $GITHUB_OUTPUT
 
       - name: Commit and push changes
         run: |
