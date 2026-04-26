@@ -19,26 +19,24 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4.2.2
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v5
+
       - name: Setup Node.js
         uses: actions/setup-node@v4.1.0
         with:
           node-version-file: '.node-version'
-
-      - name: Cache node_modules
-        id: cache-node-modules
-        uses: actions/cache@v4.2.0
-        with:
-          path: node_modules
-          key: node-modules-${{ runner.os }}-${{ hashFiles('package-lock.json') }}
+          cache: 'pnpm'
+          cache-dependency-path: 'pnpm-lock.yaml'
 
       - name: Install dependencies
-        if: steps.cache-node-modules.outputs.cache-hit != 'true'
-        run: npm ci
+        run: |
+          pnpm install --frozen-lockfile
 
       - name: Copy ffmpeg binaries to resources dir
         run: make resources/bin
 
       - name: Publish
-        run: npm run publish
+        run: pnpm run publish
         env:
           GITHUB_TOKEN: ${{ secrets.github_token }}

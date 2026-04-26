@@ -25,15 +25,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4.2.2
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v5
+
       - name: Setup Node.js
         uses: actions/setup-node@v4.1.0
         with:
           node-version-file: '.node-version'
+          cache: 'pnpm'
+          cache-dependency-path: 'pnpm-lock.yaml'
 
       - name: Bump version
         id: bump_version
         run: |
-          echo "newversion=$(npm version --no-git-tag-version ${{ github.event.inputs.bump_type }})" >> $GITHUB_OUTPUT
+          echo "newversion=$(pnpm version --no-git-tag-version ${{ github.event.inputs.bump_type }})" >> $GITHUB_OUTPUT
 
       - name: Commit and push changes
         run: |
