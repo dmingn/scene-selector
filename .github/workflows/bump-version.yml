@@ -29,8 +29,12 @@ jobs:
         uses: actions/setup-node@v4.1.0
         with:
           node-version-file: '.node-version'
-          cache: 'pnpm'
-          cache-dependency-path: 'pnpm-lock.yaml'
+
+      - name: Cache pnpm store
+        uses: actions/cache@v4.2.0
+        with:
+          path: ~/.local/share/pnpm/store
+          key: pnpm-store-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
 
       - name: Bump version
         id: bump_version
