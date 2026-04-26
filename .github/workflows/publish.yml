@@ -19,6 +19,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4.2.2
 
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v5
+
       - name: Setup Node.js
         uses: actions/setup-node@v4.1.0
         with:
@@ -26,12 +29,8 @@ jobs:
           cache: 'pnpm'
           cache-dependency-path: 'pnpm-lock.yaml'
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v5
-
       - name: Install dependencies
         run: |
-          pnpm --version | grep -Fx '8.15.9'
           pnpm install --frozen-lockfile
 
       - name: Copy ffmpeg binaries to resources dir

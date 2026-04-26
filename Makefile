@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := check
 
-PNPM := corepack pnpm
+PNPM := pnpm
 PNPM_EXEC := $(PNPM) exec
 
 .PHONY: videos
