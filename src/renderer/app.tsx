@@ -37,7 +37,8 @@ const Content = () => {
     });
   };
 
-  const isReady = videoInfo.fps !== undefined && videoInfo.frameCount !== undefined;
+  const isReady =
+    videoInfo.fps !== undefined && videoInfo.frameCount !== undefined;
 
   return (
     <div
@@ -116,9 +117,7 @@ const Content = () => {
           </Alert>
         ) : isReady ? (
           <StartEndSelector />
-        ) : (
-          <></>
-        ))}
+        ) : null)}
       {videoInfo.filePath !== undefined && isReady && (
         <CommandExample
           startFrameNumber={frameNumbers.start}
