@@ -1,6 +1,7 @@
 import { css } from '@emotion/react';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { Alert, Button, CircularProgress, Tooltip } from '@mui/material';
+import type { ChangeEvent, DragEvent } from 'react';
 import { useContext } from 'react';
 import { createRoot } from 'react-dom/client';
 import { CommandExample } from './components/CommandExample';
@@ -36,12 +37,15 @@ const Content = () => {
     });
   };
 
+  const isReady =
+    videoInfo.fps !== undefined && videoInfo.frameCount !== undefined;
+
   return (
     <div
-      onDragOver={(event) => {
+      onDragOver={(event: DragEvent<HTMLDivElement>) => {
         event.preventDefault();
       }}
-      onDrop={(event) => {
+      onDrop={(event: DragEvent<HTMLDivElement>) => {
         event.preventDefault();
         const file = event.dataTransfer.files?.[0];
 
@@ -60,7 +64,7 @@ const Content = () => {
       <div css={css({ display: 'flex', gap: '8px' })}>
         <FileInput
           value={videoInfo.filePath}
-          onChange={(event) => {
+          onChange={(event: ChangeEvent<HTMLInputElement>) => {
             const file = event.target.files?.[0];
 
             if (file) {
@@ -69,7 +73,7 @@ const Content = () => {
           }}
           css={css({ flex: 1 })}
         />
-        {videoInfo.state === 'FETCHED' && (
+        {isReady && (
           <Tooltip title="Reset">
             <Button variant="outlined" onClick={resetFrameNumbers}>
               <RestartAltIcon />
@@ -77,10 +81,10 @@ const Content = () => {
           </Tooltip>
         )}
       </div>
-      {videoInfo.state !== 'IDLE' &&
-        (videoInfo.state === 'FETCHED' ? (
-          <StartEndSelector />
-        ) : videoInfo.state === 'ERROR' ? (
+      {videoInfo.filePath !== undefined &&
+        (videoInfo.isFetching ? (
+          <CircularProgress data-testid="e2e-loading-indicator" />
+        ) : videoInfo.isError ? (
           <Alert
             data-testid="e2e-video-info-error"
             severity="error"
@@ -91,9 +95,6 @@ const Content = () => {
                   color="inherit"
                   size="small"
                   onClick={() => {
-                    if (videoInfo.filePath) {
-                      setFilePath(videoInfo.filePath);
-                    }
                     refetchVideoInfo();
                   }}
                 >
@@ -114,18 +115,15 @@ const Content = () => {
           >
             {videoInfo.errorMessage}
           </Alert>
-        ) : (
-          <CircularProgress data-testid="e2e-loading-indicator" />
-        ))}
-      {videoInfo.state !== 'IDLE' &&
-        (videoInfo.state === 'FETCHED' ? (
-          <CommandExample
-            startFrameNumber={frameNumbers.start}
-            endFrameNumber={frameNumbers.end}
-          />
-        ) : (
-          <></>
-        ))}
+        ) : isReady ? (
+          <StartEndSelector />
+        ) : null)}
+      {videoInfo.filePath !== undefined && isReady && (
+        <CommandExample
+          startFrameNumber={frameNumbers.start}
+          endFrameNumber={frameNumbers.end}
+        />
+      )}
     </div>
   );
 };
