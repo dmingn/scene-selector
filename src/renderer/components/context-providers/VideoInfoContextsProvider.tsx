@@ -1,13 +1,17 @@
-import { createContext, ReactNode, useEffect, useReducer } from 'react';
+import { createContext, ReactNode, useMemo, useState } from 'react';
 import { getVideoInfoInputSchema } from '../../../rpcSchema';
-import {
-  VideoInfo,
-  videoInfoInitialState,
-  videoInfoReducer,
-} from '../../states/videoInfo';
 import { trpc } from '../../trpc';
 
-export const VideoInfoContext = createContext<VideoInfo>(null);
+export type VideoInfoContextValue = {
+  filePath: string | undefined;
+  fps: number | undefined;
+  frameCount: number | undefined;
+  isFetching: boolean;
+  isError: boolean;
+  errorMessage: string | undefined;
+};
+
+export const VideoInfoContext = createContext<VideoInfoContextValue>(null);
 
 export const VideoInfoSetFilePathContext =
   createContext<(filePath: string) => void>(null);
@@ -17,44 +21,44 @@ export const VideoInfoResetContext = createContext<() => void>(null);
 export const VideoInfoRefetchContext = createContext<() => void>(null);
 
 export const VideoInfoContextsProvider = (props: { children: ReactNode }) => {
-  const [videoInfo, dispatchVideoInfo] = useReducer(
-    videoInfoReducer,
-    videoInfoInitialState,
-  );
+  const [filePath, setFilePath] = useState<string | undefined>(undefined);
 
-  const getVideoInfoInput = { videoPath: videoInfo.filePath };
+  const getVideoInfoInput = { videoPath: filePath };
   const {
     data: fetchedVideoInfo,
     isError: getVideoInfoIsError,
     error: getVideoInfoError,
+    isFetching: getVideoInfoIsFetching,
     refetch: refetchVideoInfo,
   } = trpc.getVideoInfo.useQuery(getVideoInfoInput, {
     enabled: getVideoInfoInputSchema.safeParse(getVideoInfoInput).success,
   });
 
-  useEffect(() => {
-    if (fetchedVideoInfo) {
-      dispatchVideoInfo({
-        type: 'SET_INFO',
-        fps: fetchedVideoInfo.fps,
-        frameCount: fetchedVideoInfo.frameCount,
-      });
-    }
-  }, [fetchedVideoInfo]);
-
-  useEffect(() => {
-    if (getVideoInfoIsError) {
-      dispatchVideoInfo({
-        type: 'SET_ERROR',
-        errorMessage: getVideoInfoError?.message ?? 'Failed to load video info.',
-      });
-    }
-  }, [getVideoInfoIsError, getVideoInfoError]);
+  const videoInfo = useMemo<VideoInfoContextValue>(
+    () => ({
+      filePath,
+      fps: fetchedVideoInfo?.fps,
+      frameCount: fetchedVideoInfo?.frameCount,
+      isFetching: getVideoInfoIsFetching,
+      isError: getVideoInfoIsError,
+      errorMessage: getVideoInfoIsError
+        ? getVideoInfoError?.message ?? 'Failed to load video info.'
+        : undefined,
+    }),
+    [
+      filePath,
+      fetchedVideoInfo?.fps,
+      fetchedVideoInfo?.frameCount,
+      getVideoInfoIsFetching,
+      getVideoInfoIsError,
+      getVideoInfoError,
+    ],
+  );
   return (
     <VideoInfoContext.Provider value={videoInfo}>
       <VideoInfoResetContext.Provider
         value={() => {
-          dispatchVideoInfo({ type: 'RESET' });
+          setFilePath(undefined);
         }}
       >
         <VideoInfoRefetchContext.Provider
@@ -64,7 +68,7 @@ export const VideoInfoContextsProvider = (props: { children: ReactNode }) => {
         >
           <VideoInfoSetFilePathContext.Provider
             value={(filePath: string) => {
-              dispatchVideoInfo({ type: 'SET_FILE_PATH', filePath });
+              setFilePath(filePath);
             }}
           >
             {props.children}
