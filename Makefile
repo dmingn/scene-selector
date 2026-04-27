@@ -39,6 +39,10 @@ test: deps test-prereqs
 .PHONY: check
 check: deps lint typecheck test
 
+.PHONY: dev
+dev: deps resources/bin
+	$(PNPM) start
+
 .PHONY: e2e-build
 e2e-build: deps
 	$(PNPM_EXEC) electron-forge package
