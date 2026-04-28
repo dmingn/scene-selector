@@ -3,18 +3,19 @@ import { Button, Dialog } from '@mui/material';
 import { useContext, useEffect, useReducer } from 'react';
 import { frameNumberToTimecode } from '../../utils/frameNumberToTimecode';
 import {
-  BinarySearchAction,
-  binarySearchInitialState,
-  binarySearchReducer,
-  BinarySearchState,
-} from '../states/binarySearchState';
+  RangeNarrowingAction,
+  rangeNarrowingInitialState,
+  rangeNarrowingReducer,
+  RangeNarrowingState,
+} from '../states/rangeNarrowingState';
 import { FrameImage } from './FrameImage';
 import { VideoInfoContext } from './context-providers/VideoInfoContextsProvider';
 
-const FrameImageAndSelectButton = (props: {
+const FrameImageAndActionButton = (props: {
   fps: number;
   frameNumber: number;
-  onSelect: (value: number) => void;
+  buttonLabel: string;
+  onClick: () => void;
   testId?: string;
   className?: string;
   css?: SerializedStyles;
@@ -38,20 +39,19 @@ const FrameImageAndSelectButton = (props: {
       <Button
         data-testid={props.testId}
         variant="outlined"
-        onClick={() => {
-          props.onSelect(props.frameNumber);
-        }}
+        onClick={props.onClick}
       >
-        Select
+        {props.buttonLabel}
       </Button>
     </div>
   );
 };
 
-const FrameImageAndSelectButtons = (props: {
+const FrameImageAndActionButtons = (props: {
   fps: number;
   frameNumbers: number[];
-  onSelect: (value: number) => void;
+  buttonLabel: string;
+  onClick: (frameNumber: number, index: number) => void;
   testIdPrefix?: string;
 }) => {
   return (
@@ -64,11 +64,14 @@ const FrameImageAndSelectButtons = (props: {
       })}
     >
       {props.frameNumbers.map((frameNumber, index) => (
-        <FrameImageAndSelectButton
+        <FrameImageAndActionButton
           key={index}
           fps={props.fps}
           frameNumber={frameNumber}
-          onSelect={props.onSelect}
+          buttonLabel={props.buttonLabel}
+          onClick={() => {
+            props.onClick(frameNumber, index);
+          }}
           testId={
             props.testIdPrefix ? `${props.testIdPrefix}-select-${index}` : undefined
           }
@@ -79,11 +82,10 @@ const FrameImageAndSelectButtons = (props: {
   );
 };
 
-const BinarySearchControl = (props: {
-  binarySearchState: BinarySearchState;
-  dispatchBinarySearch: (action: BinarySearchAction) => void;
+const CandidateNarrowingControl = (props: {
+  rangeNarrowingState: RangeNarrowingState;
+  dispatchRangeNarrowing: (action: RangeNarrowingAction) => void;
   fps: number;
-  onModalClose: (value: number | null) => void;
 }) => {
   return (
     <div
@@ -94,56 +96,20 @@ const BinarySearchControl = (props: {
         gap: '8px',
       })}
     >
-      <FrameImageAndSelectButtons
+      <FrameImageAndActionButtons
         fps={props.fps}
-        frameNumbers={[
-          props.binarySearchState.left,
-          props.binarySearchState.mid,
-          props.binarySearchState.right,
-        ]}
-        onSelect={props.onModalClose}
-        testIdPrefix="e2e-binary-search"
+        frameNumbers={props.rangeNarrowingState.candidates}
+        buttonLabel="Zoom in"
+        onClick={(_value: number, index: number) => {
+          props.dispatchRangeNarrowing({ type: 'ZOOM_IN', index });
+        }}
+        testIdPrefix="e2e-range-narrowing"
       />
-      <div
-        css={css({
-          display: 'flex',
-          justifyContent: 'space-between',
-          gap: '8px',
-          width: '60%',
-        })}
-      >
-        <Button
-          data-testid="e2e-bisect-left"
-          variant="outlined"
-          onClick={() => {
-            props.dispatchBinarySearch({ type: 'BISECT_LEFT' });
-          }}
-          disabled={
-            props.binarySearchState.mid - props.binarySearchState.left <= 1
-          }
-          css={css({ flex: 1 })}
-        >
-          L
-        </Button>
-        <Button
-          data-testid="e2e-bisect-right"
-          variant="outlined"
-          onClick={() => {
-            props.dispatchBinarySearch({ type: 'BISECT_RIGHT' });
-          }}
-          disabled={
-            props.binarySearchState.right - props.binarySearchState.mid <= 1
-          }
-          css={css({ flex: 1 })}
-        >
-          R
-        </Button>
-      </div>
     </div>
   );
 };
 
-export const BinarySearchModal = (props: {
+export const RangeNarrowingModal = (props: {
   open: boolean;
   onClose: (value: number | null) => void;
   leftFrameNumber: number;
@@ -151,14 +117,14 @@ export const BinarySearchModal = (props: {
 }) => {
   const { fps } = useContext(VideoInfoContext);
 
-  const [binarySearchState, dispatchBinarySearch] = useReducer(
-    binarySearchReducer,
-    binarySearchInitialState,
+  const [rangeNarrowingState, dispatchRangeNarrowing] = useReducer(
+    rangeNarrowingReducer,
+    rangeNarrowingInitialState,
   );
 
   useEffect(() => {
     if (props.open) {
-      dispatchBinarySearch({
+      dispatchRangeNarrowing({
         type: 'RESET',
         left: props.leftFrameNumber,
         right: props.rightFrameNumber,
@@ -168,7 +134,7 @@ export const BinarySearchModal = (props: {
 
   return (
     <Dialog
-      data-testid="e2e-binary-search-modal"
+      data-testid="e2e-range-narrowing-modal"
       open={props.open}
       onClose={() => {
         props.onClose(null);
@@ -177,7 +143,7 @@ export const BinarySearchModal = (props: {
       maxWidth="xl"
     >
       <div
-        data-testid="e2e-binary-search-modal-body"
+        data-testid="e2e-range-narrowing-modal-body"
         css={css({
           display: 'flex',
           flexDirection: 'column',
@@ -186,23 +152,25 @@ export const BinarySearchModal = (props: {
           padding: '16px',
         })}
       >
-        {binarySearchState.right - binarySearchState.left < 10 ? (
-          <FrameImageAndSelectButtons
+        {rangeNarrowingState.right - rangeNarrowingState.left < 10 ? (
+          <FrameImageAndActionButtons
             fps={fps}
             frameNumbers={[
               ...Array(
-                binarySearchState.right - binarySearchState.left + 1,
+                rangeNarrowingState.right - rangeNarrowingState.left + 1,
               ).keys(),
-            ].map((i) => i + binarySearchState.left)}
-            onSelect={props.onClose}
-            testIdPrefix="e2e-binary-search"
+            ].map((i) => i + rangeNarrowingState.left)}
+            buttonLabel="Select"
+            onClick={(frameNumber: number) => {
+              props.onClose(frameNumber);
+            }}
+            testIdPrefix="e2e-range-narrowing"
           />
         ) : (
-          <BinarySearchControl
-            binarySearchState={binarySearchState}
-            dispatchBinarySearch={dispatchBinarySearch}
+          <CandidateNarrowingControl
+            rangeNarrowingState={rangeNarrowingState}
+            dispatchRangeNarrowing={dispatchRangeNarrowing}
             fps={fps}
-            onModalClose={props.onClose}
           />
         )}
         <div
@@ -212,12 +180,12 @@ export const BinarySearchModal = (props: {
           })}
         >
           <Button
-            data-testid="e2e-binary-search-undo"
+            data-testid="e2e-range-narrowing-undo"
             variant="outlined"
             onClick={() => {
-              dispatchBinarySearch({ type: 'UNDO' });
+              dispatchRangeNarrowing({ type: 'UNDO' });
             }}
-            disabled={!binarySearchState.undoable}
+            disabled={!rangeNarrowingState.undoable}
             css={css({ flex: 1 })}
           >
             Undo
