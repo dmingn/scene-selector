@@ -2,7 +2,7 @@ import { css } from '@emotion/react';
 import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import { Alert, Button, CircularProgress, Tooltip } from '@mui/material';
 import type { ChangeEvent, DragEvent } from 'react';
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 import { CommandExample } from './components/CommandExample';
 import {
@@ -29,6 +29,9 @@ const Content = () => {
 
   const frameNumbers = useContext(FrameNumbersContext);
   const dispatchFrameNumbers = useContext(FrameNumbersDispatchContext);
+
+  const [copyCodec, setCopyCodec] = useState(false);
+  const [wsl, setWsl] = useState(false);
 
   const resetFrameNumbers = () => {
     dispatchFrameNumbers({
@@ -122,6 +125,10 @@ const Content = () => {
         <CommandExample
           startFrameNumber={frameNumbers.start}
           endFrameNumber={frameNumbers.end}
+          copyCodec={copyCodec}
+          onCopyCodecChange={setCopyCodec}
+          wsl={wsl}
+          onWslChange={setWsl}
         />
       )}
     </div>
