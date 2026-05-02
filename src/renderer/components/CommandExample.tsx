@@ -10,28 +10,35 @@ import { VideoInfoContext } from './context-providers/VideoInfoContextsProvider'
 export const CommandExample = (props: {
   startFrameNumber: number;
   endFrameNumber: number;
+  copyCodec: boolean;
+  onCopyCodecChange: (value: boolean) => void;
+  wsl: boolean;
+  onWslChange: (value: boolean) => void;
 }) => {
   const { filePath, fps } = useContext(VideoInfoContext);
-  const [copyCodec, setCopyCodec] = useState(false);
-  const [wsl, setWsl] = useState(false);
+  const {
+    startFrameNumber,
+    endFrameNumber,
+    copyCodec,
+    onCopyCodecChange,
+    wsl,
+    onWslChange,
+  } = props;
 
   const filePathConverted = wsl ? convertWinPathToWSL(filePath) : filePath;
 
   const command = [
     'ffmpeg',
     '-ss',
-    frameNumberToTimecode(props.startFrameNumber, fps),
+    frameNumberToTimecode(startFrameNumber, fps),
     '-i',
     `"${filePathConverted}"`,
     '-to',
-    frameNumberToTimecode(
-      props.endFrameNumber - props.startFrameNumber + 1,
-      fps,
-    ),
+    frameNumberToTimecode(endFrameNumber - startFrameNumber + 1, fps),
   ]
     .concat(copyCodec ? ['-c', 'copy'] : [])
     .concat([
-      `"${getOutPath(filePathConverted, props.startFrameNumber, props.endFrameNumber)}"`,
+      `"${getOutPath(filePathConverted, startFrameNumber, endFrameNumber)}"`,
     ])
     .join(' ');
 
@@ -88,7 +95,7 @@ export const CommandExample = (props: {
               inputProps={switchInputProps('e2e-copy-codec-switch')}
               checked={copyCodec}
               onChange={(event) => {
-                setCopyCodec(event.target.checked);
+                onCopyCodecChange(event.target.checked);
               }}
             />
           }
@@ -101,7 +108,7 @@ export const CommandExample = (props: {
                 inputProps={switchInputProps('e2e-wsl-switch')}
                 checked={wsl}
                 onChange={(event) => {
-                  setWsl(event.target.checked);
+                  onWslChange(event.target.checked);
                 }}
               />
             }
