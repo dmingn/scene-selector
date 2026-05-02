@@ -1,59 +1,8 @@
 import { css } from '@emotion/react';
-import { Button, ButtonGroup } from '@mui/material';
+import { Button } from '@mui/material';
 import { useContext } from 'react';
 import { frameNumberToTimecode } from '../../utils/frameNumberToTimecode';
 import { VideoInfoContext } from './context-providers/VideoInfoContextsProvider';
-
-const AddSubButton = (props: {
-  frameNumber: number;
-  setFrameNumber: (frameNumber: number) => void;
-  diff: number;
-  fps: number;
-  type: 'frame' | 'second';
-}) => {
-  const value =
-    (props.diff >= 0 ? '+' : '') +
-    props.diff.toString() +
-    (props.type === 'second' ? 's' : '');
-
-  return (
-    <Button
-      variant="outlined"
-      onClick={() => {
-        props.setFrameNumber(
-          props.frameNumber +
-            (props.type === 'second' ? props.diff * props.fps : props.diff),
-        );
-      }}
-      key={value}
-    >
-      {value}
-    </Button>
-  );
-};
-
-const AddSubButtonGroup = (props: {
-  frameNumber: number;
-  setFrameNumber: (frameNumber: number) => void;
-  diffs: number[];
-  fps: number;
-  type: 'frame' | 'second';
-}) => {
-  return (
-    <ButtonGroup>
-      {props.diffs.map((diff) => (
-        <AddSubButton
-          frameNumber={props.frameNumber}
-          setFrameNumber={props.setFrameNumber}
-          diff={diff}
-          fps={props.fps}
-          type={props.type}
-          key={diff}
-        />
-      ))}
-    </ButtonGroup>
-  );
-};
 
 export const FrameNumberControl = (props: {
   frameNumber: number;
@@ -62,55 +11,44 @@ export const FrameNumberControl = (props: {
   const { fps } = useContext(VideoInfoContext);
 
   return (
-    <div css={css({ display: 'flex', flexDirection: 'column', gap: '4px' })}>
+    <div
+      css={css({
+        display: 'flex',
+        alignItems: 'center',
+        gap: '8px',
+      })}
+    >
+      <Button
+        variant="outlined"
+        onClick={() => {
+          props.setFrameNumber(props.frameNumber - 1);
+        }}
+      >
+        -1
+      </Button>
       <div
         css={css({
+          flex: 1,
           display: 'flex',
-          justifyContent: 'space-between',
+          flexDirection: 'column',
           alignItems: 'center',
+          gap: '2px',
+          minWidth: 0,
         })}
       >
-        <AddSubButtonGroup
-          frameNumber={props.frameNumber}
-          setFrameNumber={props.setFrameNumber}
-          diffs={[-10, -5, -1]}
-          fps={fps}
-          type="frame"
-        />
         <div data-testid="e2e-frame-number">{props.frameNumber}</div>
-        <AddSubButtonGroup
-          frameNumber={props.frameNumber}
-          setFrameNumber={props.setFrameNumber}
-          diffs={[1, 5, 10]}
-          fps={fps}
-          type="frame"
-        />
-      </div>
-      <div
-        css={css({
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        })}
-      >
-        <AddSubButtonGroup
-          frameNumber={props.frameNumber}
-          setFrameNumber={props.setFrameNumber}
-          diffs={[-10, -5, -1]}
-          fps={fps}
-          type="second"
-        />
         <div data-testid="e2e-frame-timecode">
           {frameNumberToTimecode(props.frameNumber, fps)}
         </div>
-        <AddSubButtonGroup
-          frameNumber={props.frameNumber}
-          setFrameNumber={props.setFrameNumber}
-          diffs={[1, 5, 10]}
-          fps={fps}
-          type="second"
-        />
       </div>
+      <Button
+        variant="outlined"
+        onClick={() => {
+          props.setFrameNumber(props.frameNumber + 1);
+        }}
+      >
+        +1
+      </Button>
     </div>
   );
 };
