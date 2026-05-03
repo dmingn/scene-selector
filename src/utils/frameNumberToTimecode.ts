@@ -1,7 +1,19 @@
+const missingTimecode = '--:--:--';
+
 export const frameNumberToTimecode = (
-  frameNumber: number,
-  fps: number,
+  frameNumber: number | undefined | null,
+  fps: number | undefined | null,
 ): string => {
+  if (
+    frameNumber == null ||
+    fps == null ||
+    fps === 0 ||
+    !Number.isFinite(frameNumber) ||
+    !Number.isFinite(fps)
+  ) {
+    return missingTimecode;
+  }
+
   const totalSeconds = frameNumber / fps;
 
   const hours = Math.floor(totalSeconds / 3600);
