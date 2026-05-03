@@ -11,3 +11,15 @@ test.each([
 ])('frameNumberToTimecode(%i, %i) = %s', (frameNumber, fps, expression) => {
   expect(frameNumberToTimecode(frameNumber, fps)).toBe(expression);
 });
+
+test.each([
+  ['undefined frameNumber', undefined, 30],
+  ['undefined fps', 0, undefined],
+  ['null frameNumber', null, 30],
+  ['null fps', 0, null],
+  ['zero fps', 0, 0],
+  ['NaN frameNumber', NaN, 30],
+  ['NaN fps', 0, NaN],
+] as const)('frameNumberToTimecode returns placeholder (%s)', (_label, frameNumber, fps) => {
+  expect(frameNumberToTimecode(frameNumber, fps)).toBe('--:--:--');
+});
