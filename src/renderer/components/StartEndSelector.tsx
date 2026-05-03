@@ -1,8 +1,11 @@
 import { css } from '@emotion/react';
 import NavigationIcon from '@mui/icons-material/Navigation';
 import { Slider, SliderThumb } from '@mui/material';
-import { sliderClasses } from '@mui/material/Slider';
-import { forwardRef, useContext, type ReactNode } from 'react';
+import {
+  sliderClasses,
+  type SliderOwnerState,
+} from '@mui/material/Slider';
+import { forwardRef, useContext, type ComponentProps } from 'react';
 import { frameNumberToTimecode } from '../../utils/frameNumberToTimecode';
 import { FrameView } from './FrameView';
 import {
@@ -11,17 +14,17 @@ import {
 } from './context-providers/FrameNumbersContextsProvider';
 import { VideoInfoContext } from './context-providers/VideoInfoContextsProvider';
 
-const RangeThumb = forwardRef<HTMLSpanElement, Record<string, unknown>>(
-  (props, ref) => {
-    const thumbProps = props as Record<string, unknown> & {
-      children?: ReactNode;
-      'data-index'?: number;
-    };
+type SliderThumbSlotProps = Exclude<
+  ComponentProps<typeof SliderThumb>,
+  (ownerState: SliderOwnerState) => unknown
+> & {
+  'data-index'?: number;
+};
 
-    const dataIndex = Number(thumbProps['data-index']);
+const RangeThumb = forwardRef<HTMLSpanElement, SliderThumbSlotProps>(
+  ({ children, 'data-index': dataIndexProp, ...rest }, ref) => {
+    const dataIndex = Number(dataIndexProp);
     const limit = dataIndex === 0 || dataIndex === 2 || dataIndex === 4;
-
-    const { children, ...rest } = thumbProps;
 
     if (limit) {
       return (
