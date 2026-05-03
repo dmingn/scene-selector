@@ -19,6 +19,8 @@ export default [{
         ".vite/**",
         "dist/**",
         "out/**",
+        "playwright-report/**",
+        "test-results/**",
     ],
 }, ...fixupConfigRules(compat.extends(
     "eslint:recommended",
