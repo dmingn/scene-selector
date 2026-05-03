@@ -1,10 +1,7 @@
 import { css } from '@emotion/react';
 import NavigationIcon from '@mui/icons-material/Navigation';
 import { Slider, SliderThumb } from '@mui/material';
-import {
-  sliderClasses,
-  type SliderOwnerState,
-} from '@mui/material/Slider';
+import { sliderClasses, type SliderOwnerState } from '@mui/material/Slider';
 import { forwardRef, useContext, type ComponentProps } from 'react';
 import { frameNumberToTimecode } from '../../utils/frameNumberToTimecode';
 import { FrameView } from './FrameView';
@@ -92,34 +89,27 @@ export const StartEndSelector = () => {
     newValue: number | number[],
     activeThumb: number,
   ) => {
-    const points = Array.isArray(newValue)
-      ? newValue
-      : [
-          frameNumbers.leftLimit,
-          frameNumbers.start,
-          frameNumbers.midLimit,
-          frameNumbers.end,
-          frameNumbers.rightLimit,
-        ];
+    const changed = Array.isArray(newValue) ? newValue[activeThumb] : newValue;
+
+    if (typeof changed !== 'number') {
+      return;
+    }
 
     switch (activeThumb) {
       case 0:
-        dispatchFrameNumbers({ type: 'SET_LEFT_LIMIT', leftLimit: points[0] });
+        dispatchFrameNumbers({ type: 'SET_LEFT_LIMIT', leftLimit: changed });
         return;
       case 1:
-        dispatchFrameNumbers({ type: 'SET_START', start: points[1] });
+        dispatchFrameNumbers({ type: 'SET_START', start: changed });
         return;
       case 2:
-        dispatchFrameNumbers({ type: 'SET_MID_LIMIT', midLimit: points[2] });
+        dispatchFrameNumbers({ type: 'SET_MID_LIMIT', midLimit: changed });
         return;
       case 3:
-        dispatchFrameNumbers({ type: 'SET_END', end: points[3] });
+        dispatchFrameNumbers({ type: 'SET_END', end: changed });
         return;
       case 4:
-        dispatchFrameNumbers({
-          type: 'SET_RIGHT_LIMIT',
-          rightLimit: points[4],
-        });
+        dispatchFrameNumbers({ type: 'SET_RIGHT_LIMIT', rightLimit: changed });
         return;
       default:
         return;
