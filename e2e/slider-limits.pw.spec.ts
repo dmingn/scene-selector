@@ -11,21 +11,26 @@ test.describe('Range slider limits', () => {
     await expect(page.getByTestId('e2e-start-end-selector')).toBeVisible();
     await expect(page.getByTestId('e2e-command-example')).toBeVisible();
 
-    const endFrame = page
-      .getByTestId('e2e-frame-view-end')
-      .getByTestId('e2e-frame-number');
-    const endBefore = await endFrame.textContent();
-
     // Thumbs are ordered: leftLimit, start, midLimit, end, rightLimit
-    const rightLimitThumb = page
-      .locator('[data-testid="e2e-range-slider"] .MuiSlider-thumb')
-      .nth(4);
-    await rightLimitThumb.click();
+    const slider = page.getByTestId('e2e-range-slider');
+    const endInput = slider.locator('input[type="range"][data-index="3"]');
+    const rightLimitInput = slider.locator('input[type="range"][data-index="4"]');
+
+    // The reducer clamps rightLimit >= end, so first move end left to create room.
+    await endInput.focus();
+    for (let i = 0; i < 10; i++) {
+      await page.keyboard.press('ArrowLeft');
+    }
+
+    const rightLimitBefore = Number(await rightLimitInput.inputValue());
+
+    await rightLimitInput.focus();
     for (let i = 0; i < 3; i++) {
       await page.keyboard.press('ArrowLeft');
     }
 
-    const endAfter = await endFrame.textContent();
-    expect(endAfter).not.toBe(endBefore);
+    const rightLimitAfter = Number(await rightLimitInput.inputValue());
+    expect(rightLimitAfter).toBeLessThan(rightLimitBefore);
+    expect(rightLimitAfter).toBeGreaterThanOrEqual(Number(await endInput.inputValue()));
   });
 });

@@ -24,13 +24,15 @@ test.describe('Happy path', () => {
     await expect(page.getByTestId('e2e-copy-codec-switch')).not.toBeChecked();
     await page.getByTestId('e2e-copy-codec-switch').check();
     await expect(page.getByTestId('e2e-copy-codec-switch')).toBeChecked();
-    await expect(commandTextarea).toContainText('-c copy');
+    await expect
+      .poll(async () => await commandTextarea.inputValue())
+      .toContain('-c copy');
 
     // Move the end slider thumb a bit to force command change.
-    const endThumb = page
-      .locator('[data-testid="e2e-range-slider"] .MuiSlider-thumb')
-      .nth(3);
-    await endThumb.focus();
+    const endInput = page.locator(
+      '[data-testid="e2e-range-slider"] input[type="range"][data-index="3"]',
+    );
+    await endInput.focus();
     for (let i = 0; i < 3; i++) {
       await page.keyboard.press('ArrowLeft');
     }
