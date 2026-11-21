@@ -79,6 +79,9 @@
       "@electron/universal>minimatch": "11.0.9",
       "tar": "7.5.23",
       "tmp": "0.2.7"
+    },
+    "patchedDependencies": {
+      "electron-installer-redhat@3.4.0": "patches/electron-installer-redhat@3.4.0.patch"
     }
   }
 }
