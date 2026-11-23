@@ -3,24 +3,24 @@
   "productName": "scene-selector",
   "version": "0.12.1",
   "description": "A GUI application to select a scene from a video frame by frame",
-  "main": ".vite/build/main.js",
+  "main": ".vite/build/main.cjs",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
     "make": "electron-forge make",
-    "publish": "electron-forge publish"
+    "release": "electron-forge release"
   },
   "devDependencies": {
-    "@electron-forge/cli": "^7.11.2",
-    "@electron-forge/maker-deb": "^7.11.2",
-    "@electron-forge/maker-rpm": "^7.11.2",
-    "@electron-forge/maker-squirrel": "^7.11.2",
-    "@electron-forge/maker-zip": "^7.11.2",
-    "@electron-forge/plugin-auto-unpack-natives": "^7.11.2",
-    "@electron-forge/plugin-fuses": "^7.11.2",
-    "@electron-forge/plugin-vite": "^7.11.2",
-    "@electron-forge/publisher-github": "^7.11.2",
-    "@electron/fuses": "^1.8.0",
+    "@electron-forge/cli": "^8.0.1",
+    "@electron-forge/maker-deb": "^8.0.1",
+    "@electron-forge/maker-rpm": "^8.0.1",
+    "@electron-forge/maker-squirrel": "^8.0.1",
+    "@electron-forge/maker-zip": "^8.0.1",
+    "@electron-forge/plugin-auto-unpack-natives": "^8.0.1",
+    "@electron-forge/plugin-fuses": "^8.0.1",
+    "@electron-forge/plugin-vite": "^8.0.1",
+    "@electron-forge/publisher-github": "^8.0.1",
+    "@electron/fuses": "^2.0.0",
     "@eslint/compat": "^1.4.1",
     "@eslint/eslintrc": "^3.3.7",
     "@eslint/js": "^9.39.5",
@@ -45,7 +45,7 @@
     "ts-jest": "^29.4.15",
     "ts-node": "^10.9.2",
     "typescript": "~5.7.3",
-    "vite": "^7.3.8"
+    "vite": "^8.0.0"
   },
   "keywords": [],
   "author": {
@@ -77,12 +77,10 @@
   "packageManager": "pnpm@9.15.0",
   "pnpm": {
     "overrides": {
-      "@electron/universal>minimatch": "11.0.9",
-      "tar": "7.5.23",
       "tmp": "0.2.7"
     },
     "patchedDependencies": {
-      "electron-installer-redhat@3.4.0": "patches/electron-installer-redhat@3.4.0.patch"
+      "electron-installer-redhat@4.0.0": "patches/electron-installer-redhat@4.0.0.patch"
     }
   }
 }
