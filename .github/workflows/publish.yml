@@ -37,7 +37,7 @@ jobs:
       - name: Copy ffmpeg binaries to resources dir
         run: make resources/bin
 
-      - name: Publish
-        run: pnpm run publish
+      - name: Release
+        run: pnpm run release
         env:
           GITHUB_TOKEN: ${{ secrets.github_token }}

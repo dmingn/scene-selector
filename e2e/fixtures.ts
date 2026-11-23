@@ -30,7 +30,7 @@ export const test = base.extend<AppFixtures>({
 
   electronApp: async ({ repoRoot, appEnv }, use) => {
     const electronApp = await electron.launch({
-      args: [path.join(repoRoot, '.vite', 'build', 'main.js')],
+      args: [path.join(repoRoot, '.vite', 'build', 'main.cjs')],
       env: {
         ...process.env,
         NODE_ENV: 'test',

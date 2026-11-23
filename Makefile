@@ -11,10 +11,10 @@ deps:
 videos: videos/avsynctest-vga-1m.mp4 videos/avsynctest-hd1080-10m.mp4
 
 videos/avsynctest-vga-1m.mp4: scripts/generateAvsynctest.ts
-	$(PNPM_EXEC) ts-node $< --duration 60 --size vga $@
+	$(PNPM_EXEC) tsx $< --duration 60 --size vga $@
 
 videos/avsynctest-hd1080-10m.mp4: scripts/generateAvsynctest.ts
-	$(PNPM_EXEC) ts-node $< --duration 600 --size hd1080 $@
+	$(PNPM_EXEC) tsx $< --duration 600 --size hd1080 $@
 
 .PHONY: resources/bin
 resources/bin: deps
