@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+
 import { MakerDeb } from '@electron-forge/maker-deb';
 import { MakerRpm } from '@electron-forge/maker-rpm';
 import { MakerSquirrel } from '@electron-forge/maker-squirrel';
@@ -6,6 +8,10 @@ import { FusesPlugin } from '@electron-forge/plugin-fuses';
 import { VitePlugin } from '@electron-forge/plugin-vite';
 import type { ForgeConfig } from '@electron-forge/shared-types';
 import { FuseV1Options, FuseVersion } from '@electron/fuses';
+
+const { version } = JSON.parse(readFileSync('./package.json', 'utf8')) as {
+  version: string;
+};
 
 const config: ForgeConfig = {
   packagerConfig: {
@@ -62,7 +68,7 @@ const config: ForgeConfig = {
         draft: false,
         force: false,
         generateReleaseNotes: true,
-        prerelease: true,
+        prerelease: version.includes('-'),
         repository: {
           owner: 'dmingn',
           name: 'scene-selector',
